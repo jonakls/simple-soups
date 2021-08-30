@@ -1,4 +1,4 @@
-# SoupPvP
+# SimpleSoups
 
 [![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=xGardenDev&repo=SimpleSoups&theme=tokyonight)](https://github.com/xGardenDev/SimpleSoups)
 
