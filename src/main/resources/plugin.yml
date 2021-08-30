@@ -1,0 +1,14 @@
+name: SimpleSoups
+version: ${project.version}
+main: me.gardendev.simplesoups.SimpleSoups
+authors: [ Jonakls ]
+commands:
+  soup:
+    aliases:
+      - soupvp
+    description: General command
+  kits:
+    aliases:
+      - kit
+      - pvp
+    description: Kit command

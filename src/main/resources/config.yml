@@ -1,0 +1,40 @@
+clear-on-join: true
+pickup-items: true
+join-teleport: true
+fall-damage: true
+deny-saturation: true
+deny-drops: true
+items-on-join: true
+deny-build: true
+respawn-time: 5
+xp-per-kill: 5
+regeneration-soup-value: 5.0
+database:
+  enable: false
+  database-name: 'SoupPvP'
+  table: 'soup'
+  user: 'root'
+  ip: 'localhost'
+  password: 'mypassword'
+items-join:
+  kits:
+    material: CHEST
+    slot: 0
+    display: '&aKits &e(Right click)'
+    lore:
+      - '&7Open menu of kits, select'
+      - '&7one and go fight!'
+signs:
+  soups: '&8[&cKitPvP&8];&cSoups'
+sounds:
+  death-countdown:
+    enable: true
+    sound: NOTE_SNARE_DRUM
+    vol: 10
+    pitch: 5
+commands:
+  enable: true
+  allow-commands:
+    - '/soup'
+    - '/kits'
+    - '/kit'

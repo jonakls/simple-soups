@@ -1,0 +1,92 @@
+prefix: '&8[&cSoupPvP&8] '
+scoreboard:
+  title: '&7[&6&k|&c SOUP PVP &6&k|&7]'
+  lines:
+    - '&r'
+    - '&cName: &6%player%'
+    - '&cXP: &6%player_xp%'
+    - '&r'
+    - '&e&nStatistics'
+    - '&cKills: &6%player_kills%'
+    - '&cDeaths: &6%player_deaths%'
+    - '&r'
+    - '&emc.yourserver.net'
+error:
+  unknown-command: '&7This command does not exist.'
+  already-kit: '&7You already have a kit on.'
+  no-spawn: '&7The spawn point is not yet defined.'
+  no-permission: '&cYou don''t have permissions.'
+  no-command: '&cYou can''t use commands in game.'
+messages:
+  reload: '&7All files has been reloaded.'
+  select-kit: '&7You selected &c%kit%'
+  set-spawn: '&7Spawn point correctly defined.'
+  change-spawn: '&7Spawn point correctly changed.'
+  death-countdown: '&7You just died. Reappears in &c%seconds% &7seconds.'
+  enabled-edit-mode: '&7You''ve enabled edit mode.'
+  disable-edit-mode: '&7You'' ha''ve disabled edit mode.'
+kill-messages:
+  death-by-fall-damage: '&c%player% &7fell to his death!'
+  death-by-lava: '&c%player% &7thought he can swim in lava!'
+  death-by-fire: '&c%player% &7burned to death!'
+  death-by-explosion: '&c%player% &7was exploded into million pieces!'
+  death-by-unknown: '&c%player% &7has been killed by an &bUnknown Object!'
+  with-players:
+    - '&c%player% &7has been killed by &a%killer%'
+    - '&c%player% &7was brutally murdered by &a%killer%'
+    - '&c%player% &7weapon couldn''t stand against &a%killer%&7!'
+    - '&a%killer% &7gave a helping hand in &c%player% &7death!'
+    - '&a%killer% &7couldn''t resist killing &c%player%&7!'
+kill-streaks:
+  broadcast: '&7Player &a%player% &7has a streak of &c%streak% &7kills'
+  fade-in: 20
+  stay: 20
+  fade-out: 20
+  kills-3:
+    title: '&cTRIPLE DEATH!'
+    subtitle: '&7You just killed 3 enemies'
+    rewards:
+      - 'give %player% golden_apple 1'
+  kills-5:
+    title: '&cPENTAKILL!'
+    subtitle: '&7You just killed 5 enemies'
+    rewards:
+      - 'give %player% golden_apple 1'
+  kills-10:
+    title: '&cSLAUGHTER!'
+    subtitle: '&7You just killed 10 enemies'
+    rewards:
+      - 'give %player% golden_apple 1'
+  kills-15:
+    title: '&cSERIAL KILLER!'
+    subtitle: '&7You just killed 15 enemies'
+    rewards:
+      - 'give %player% golden_apple 1'
+  kills-20:
+    title: '&cMANIAC!'
+    subtitle: '&7You just killed 20 enemies'
+    rewards:
+      - 'give %player% golden_apple 1'
+  kills-25:
+    title: '&cIT''S CRAZY!'
+    subtitle: '&7You just killed 25 enemies'
+    rewards:
+      - 'give %player% golden_apple 1'
+  kills-30:
+    title: '&cDAMN FRIEND!'
+    subtitle: '&7Hit the max kill streak'
+    rewards:
+      - 'give %player% golden_apple 1'
+titles:
+  select-kit:
+    title: '&aYou select &c%kit%'
+    sub-title: '&7Remember that soups help you regenerate'
+    fade-in: 20
+    stay: 20
+    fade-out: 20
+  player-death:
+    title: '&cYOU JUST DIED!'
+    sub-title: '&7Please wait for you to come back to life'
+    fade-in: 20
+    stay: 20
+    fade-out: 20

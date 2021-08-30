@@ -1,0 +1,6 @@
+kits:
+  title: '&aKits menu'
+  size: 36
+  decoration:
+refill:
+  title: '&aRefill soups'
