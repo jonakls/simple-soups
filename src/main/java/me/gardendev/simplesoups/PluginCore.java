@@ -2,14 +2,11 @@ package me.gardendev.simplesoups;
 
 import me.gardendev.simplesoups.gui.KitsGUI;
 import me.gardendev.simplesoups.handlers.KillStreakHandler;
-import me.gardendev.simplesoups.loader.CommandsLoader;
-import me.gardendev.simplesoups.loader.ManagerLoader;
+import me.gardendev.simplesoups.loader.*;
 import me.gardendev.simplesoups.manager.KillStreakManager;
 import me.gardendev.simplesoups.storage.PlayerCache;
 import me.gardendev.simplesoups.api.Core;
 import me.gardendev.simplesoups.api.Loader;
-import me.gardendev.simplesoups.loader.FilesLoader;
-import me.gardendev.simplesoups.loader.ListenersLoader;
 import me.gardendev.simplesoups.scoreboard.GameScoreboard;
 import me.gardendev.simplesoups.storage.DataStorage;
 import me.gardendev.simplesoups.storage.database.IConnection;
@@ -19,12 +16,11 @@ public class PluginCore implements Core{
 
     private final SimpleSoups plugin;
 
-    private FilesLoader filesLoader;
-    private ManagerLoader managerLoader;
+    private final FilesLoader filesLoader = new FilesLoader(this);
+    private final ManagerLoader managerLoader = new ManagerLoader();
+    private final HandlersLoader handlersLoader = new HandlersLoader(this);
 
     private KitsGUI kitsGUI;
-    private KillStreakManager killStreakManager;
-    private KillStreakHandler killStreakHandler;
     private PlayerCache playerCache;
     private IConnection connection;
     private DataStorage storage;
@@ -36,23 +32,19 @@ public class PluginCore implements Core{
 
     @Override
     public void init() {
-        filesLoader = new FilesLoader(plugin);
-        filesLoader.load();
+
+        initLoaders(
+                filesLoader,
+                new CommandsLoader(this),
+                new ListenersLoader(this),
+                managerLoader,
+                handlersLoader
+        );
 
         this.database();
         kitsGUI = new KitsGUI(filesLoader);
-        killStreakManager = new KillStreakManager();
-        killStreakHandler = new KillStreakHandler(filesLoader, killStreakManager);
         playerCache = new PlayerCache(this);
         gameScoreboard = new GameScoreboard(this);
-
-
-        managerLoader = new ManagerLoader(this);
-        managerLoader.load();
-
-        initLoaders(
-                new CommandsLoader(this),
-                new ListenersLoader(this));
     }
 
     private void database() {
@@ -67,7 +59,7 @@ public class PluginCore implements Core{
         this.connection.close();
     }
 
-    private void initLoaders(Loader... loaders){
+    private void initLoaders(Loader...loaders){
         for (Loader loader : loaders){
             loader.load();
         }
@@ -82,20 +74,12 @@ public class PluginCore implements Core{
         return plugin;
     }
 
-    public ManagerLoader getManagers(){
+    public ManagerLoader getManagers() {
         return managerLoader;
     }
 
     public KitsGUI getKitsGUI() {
         return kitsGUI;
-    }
-
-    public KillStreakManager getKillStreak() {
-        return killStreakManager;
-    }
-
-    public KillStreakHandler getKillStreakHandler(){
-        return killStreakHandler;
     }
 
     public PlayerCache getPlayerCache() {
@@ -110,4 +94,7 @@ public class PluginCore implements Core{
         return gameScoreboard;
     }
 
+    public HandlersLoader getHandlersLoader() {
+        return handlersLoader;
+    }
 }

@@ -13,47 +13,46 @@ import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class MainCommand implements CommandExecutor{
 
     private final PluginCore pluginCore;
+    private final FileManager config;
+    private final FileManager lang;
+    private final FileManager guis;
+    private final FileManager kits;
 
     public MainCommand(PluginCore pluginCore){
         this.pluginCore = pluginCore;
+        this.config = pluginCore.getFilesLoader().getConfig();
+        this.lang = pluginCore.getFilesLoader().getLang();
+        this.kits = pluginCore.getFilesLoader().getKits();
+        this.guis = pluginCore.getFilesLoader().getKits();
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        FileManager config = pluginCore.getFilesLoader().getConfig();
-        FileManager lang = pluginCore.getFilesLoader().getLang();
 
         String prefix = lang.getString("prefix");
 
         if (!(sender instanceof Player)) {
 
             if (!(args.length > 0)) {
-                List<String> help = new ArrayList<>();
 
-                help.add(prefix + "&7help commands");
-                help.add("&c- /soup help &8| &7Show help commands");
-                help.add("&c- /soup reload &8| &7Reload all files of config");
-                help.add("&c- /soup kits &8| &7Open gui of kits");
-
-                for (String line : help) {
-
-                    sender.sendMessage(Colorized.apply(line));
-
-                }
+                Colorized.commandText(
+                        sender,
+                        prefix + "&7help commands",
+                        "&c- /soup help &8| &7Show help commands",
+                        "&c- /soup reload &8| &7Reload all files of config",
+                        "&c- /soup kits &8| &7Open gui of kits"
+                );
                 return false;
             }
 
             if ("reload".equalsIgnoreCase(args[0])) {
                 lang.reload();
                 config.reload();
-                pluginCore.getFilesLoader().getKits().reload();
-                pluginCore.getFilesLoader().getGui().reload();
+                kits.reload();
+                guis.reload();
                 sender.sendMessage(prefix + lang.getString("messages.reload"));
                 return true;
             }
@@ -64,18 +63,13 @@ public class MainCommand implements CommandExecutor{
         Player player = (Player) sender;
 
         if (!(args.length > 0)) {
-            List<String> help = new ArrayList<>();
-
-            help.add(prefix + "&7help commands");
-            help.add("&c- /soup help &8| &7Show help commands");
-            help.add("&c- /soup reload &8| &7Reload all files of config");
-            help.add("&c- /soup kits &8| &7Open gui of kits");
-
-            for (String line : help) {
-
-                player.sendMessage(Colorized.apply(line));
-
-            }
+            Colorized.commandText(
+                    player,
+                    prefix + "&7help commands",
+                    "&c- /soup help &8| &7Show help commands",
+                    "&c- /soup reload &8| &7Reload all files of config",
+                    "&c- /soup kits &8| &7Open gui of kits"
+            );
             return false;
         }
 
@@ -94,8 +88,8 @@ public class MainCommand implements CommandExecutor{
             case "reload":
                 lang.reload();
                 config.reload();
-                pluginCore.getFilesLoader().getKits().reload();
-                pluginCore.getFilesLoader().getGui().reload();
+                kits.reload();
+                guis.reload();
                 sender.sendMessage(prefix + lang.getString("messages.reload"));
                 break;
             case "kits":

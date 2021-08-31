@@ -1,5 +1,6 @@
 package me.gardendev.simplesoups.listener;
 
+import me.gardendev.simplesoups.SimpleSoups;
 import me.gardendev.simplesoups.manager.FileManager;
 import me.gardendev.simplesoups.PluginCore;
 import me.gardendev.simplesoups.builders.ItemBuilder;
@@ -7,8 +8,13 @@ import me.gardendev.simplesoups.builders.TitleBuilder;
 import me.gardendev.simplesoups.enums.GameStatus;
 import me.gardendev.simplesoups.handlers.KillStreakHandler;
 import me.gardendev.simplesoups.manager.KillStreakManager;
+import me.gardendev.simplesoups.storage.PlayerCache;
 import me.gardendev.simplesoups.utils.CountdownTimer;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -22,27 +28,35 @@ import java.util.Random;
 
 public class PlayerDeathListener implements Listener {
 
-    private final PluginCore pluginCore;
+    private final SimpleSoups plugin;
+    private final PlayerCache playerCache;
+    private final FileManager lang;
+    private final FileManager config;
+    private final KillStreakManager killStreak;
+    private final KillStreakHandler killStreakHandler;
 
     public PlayerDeathListener(PluginCore pluginCore) {
-        this.pluginCore = pluginCore;
+        this.plugin = pluginCore.getPlugin();
+        this.playerCache = pluginCore.getPlayerCache();
+        this.lang = pluginCore.getFilesLoader().getLang();
+        this.config = pluginCore.getFilesLoader().getConfig();
+        this.killStreak = pluginCore.getManagers().getKillStreakManager();
+        this.killStreakHandler = pluginCore.getHandlersLoader().getKillStreakHandler();
     }
 
     @EventHandler
     public void killStreak(PlayerDeathEvent event) {
-        KillStreakManager killStreak = pluginCore.getKillStreak();
-        KillStreakHandler killStreakHandler = pluginCore.getKillStreakHandler();
 
         Player player = event.getEntity();
         Player killer = player.getKiller();
 
         if (killer != null) {
 
-            pluginCore.getPlayerCache().incrementKills(killer);
-            pluginCore.getPlayerCache().incrementDeaths(player);
-            pluginCore.getPlayerCache().incrementXp(killer);
-            pluginCore.getPlayerCache().registerPlayer(player);
-            pluginCore.getPlayerCache().registerPlayer(killer);
+            playerCache.incrementKills(killer);
+            playerCache.incrementDeaths(player);
+            playerCache.incrementXp(killer);
+            playerCache.registerPlayer(player);
+            playerCache.registerPlayer(killer);
 
             killStreak.add(killer);
             killStreak.reset(player);
@@ -53,7 +67,6 @@ public class PlayerDeathListener implements Listener {
 
     @EventHandler
     public void deathMessages(PlayerDeathEvent event) {
-        FileManager lang = pluginCore.getFilesLoader().getLang();
         Player player = event.getEntity();
         Player killer = player.getKiller();
 
@@ -62,22 +75,31 @@ public class PlayerDeathListener implements Listener {
         EntityDamageEvent.DamageCause damageCause = player.getLastDamageCause().getCause();
         if (killer == null) {
             if (damageCause.equals(EntityDamageEvent.DamageCause.FALL)) {
-                Bukkit.broadcastMessage(prefix + lang.getString("kill-messages.death-by-fall-damage").replace("%player%", player.getName()));
+                Bukkit.broadcastMessage(prefix + lang.getString("kill-messages.death-by-fall-damage")
+                        .replace("%player%", player.getName()));
                 return;
             }
             if (damageCause.equals(EntityDamageEvent.DamageCause.LAVA)) {
-                Bukkit.broadcastMessage(prefix + lang.getString("kill-messages.death-by-lava").replace("%player%", player.getName()));
+                Bukkit.broadcastMessage(prefix + lang.getString("kill-messages.death-by-lava")
+                        .replace("%player%", player.getName()));
                 return;
             }
-            if (damageCause.equals(EntityDamageEvent.DamageCause.FIRE) || damageCause.equals(EntityDamageEvent.DamageCause.FIRE_TICK)) {
-                Bukkit.broadcastMessage(prefix + lang.getString("kill-messages.death-by-fire").replace("%player%", player.getName()));
+            if (damageCause.equals(EntityDamageEvent.DamageCause.FIRE) ||
+                    damageCause.equals(EntityDamageEvent.DamageCause.FIRE_TICK)) {
+
+                Bukkit.broadcastMessage(prefix + lang.getString("kill-messages.death-by-fire")
+                        .replace("%player%", player.getName()));
                 return;
             }
-            if (damageCause.equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) || damageCause.equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION)) {
-                Bukkit.broadcastMessage(prefix + lang.getString("kill-messages.death-by-explosion").replace("%player%", player.getName()));
+            if (damageCause.equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) ||
+                    damageCause.equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION)) {
+
+                Bukkit.broadcastMessage(prefix + lang.getString("kill-messages.death-by-explosion")
+                        .replace("%player%", player.getName()));
                 return;
             }
-            Bukkit.broadcastMessage(prefix + lang.getString("kill-messages.death-by-unknown").replace("%player%", player.getName()));
+            Bukkit.broadcastMessage(prefix + lang.getString("kill-messages.death-by-unknown")
+                    .replace("%player%", player.getName()));
             return;
         }
         List<String> killsMessages = lang.getStringList("kill-messages.with-players");
@@ -89,9 +111,9 @@ public class PlayerDeathListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onDeath(PlayerDeathEvent event) {
-        FileManager config = pluginCore.getFilesLoader().getConfig();
-        FileManager lang = pluginCore.getFilesLoader().getLang();
-        event.getEntity().setMetadata("status", new FixedMetadataValue(pluginCore.getPlugin(), GameStatus.SPAWN));
+        event.getEntity().setMetadata(
+                "status", new FixedMetadataValue(plugin, GameStatus.SPAWN)
+        );
         event.getEntity().spigot().respawn();
         event.setKeepInventory(true);
         event.getEntity().getInventory().clear();
@@ -128,7 +150,7 @@ public class PlayerDeathListener implements Listener {
         );
 
         CountdownTimer timer = new CountdownTimer(
-                pluginCore.getPlugin(),
+                plugin,
                 config.getInt("respawn-time"),
                 () -> {
                     title.send(event.getEntity());
@@ -165,7 +187,9 @@ public class PlayerDeathListener implements Listener {
 
                 },
                 (t) -> {
-                    event.getEntity().sendMessage(prefix + lang.getString("messages.death-countdown").replace("%seconds%", ""+t.getSecondsLeft()));
+                    event.getEntity().sendMessage(prefix + lang.getString("messages.death-countdown")
+                            .replace("%seconds%", "" + t.getSecondsLeft()));
+
                     if (config.getBoolean("sounds.death-countdown.enable")) {
                         event.getEntity().playSound(
                                 event.getEntity().getLocation(),

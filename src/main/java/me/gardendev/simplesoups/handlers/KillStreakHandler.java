@@ -1,19 +1,20 @@
 package me.gardendev.simplesoups.handlers;
 
+import me.gardendev.simplesoups.PluginCore;
+import me.gardendev.simplesoups.manager.FileManager;
 import me.gardendev.simplesoups.manager.KillStreakManager;
 import me.gardendev.simplesoups.builders.TitleBuilder;
-import me.gardendev.simplesoups.loader.FilesLoader;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class KillStreakHandler {
 
-    private final FilesLoader files;
+    private final FileManager lang;
     private final KillStreakManager manager;
 
-    public KillStreakHandler(FilesLoader files, KillStreakManager manager) {
-        this.files = files;
-        this.manager = manager;
+    public KillStreakHandler(PluginCore pluginCore) {
+        this.lang = pluginCore.getFilesLoader().getLang();
+        this.manager = pluginCore.getManagers().getKillStreakManager();
     }
 
     public void actions(Player player) {
@@ -63,26 +64,26 @@ public class KillStreakHandler {
 
     private void rewards(Player player, int streak) {
 
-        for (String command : files.getLang().getStringList("kill-streaks.kills-" + streak + ".rewards")) {
+        for (String command : lang.getStringList("kill-streaks.kills-" + streak + ".rewards")) {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replace("%player%", player.getName()));
         }
     }
 
     private void broadcast(Player player, int streak) {
-        Bukkit.broadcastMessage(files.getLang().getString("kill-streaks.broadcast")
+        Bukkit.broadcastMessage(lang.getString("kill-streaks.broadcast")
                 .replace("%player%", player.getName())
                 .replace("%streak%", "" + streak));
     }
 
     private void title(Player player, int streak) {
         TitleBuilder builder = new TitleBuilder(
-                files.getLang().getString("kill-streaks.kills-" + streak + ".title"),
-                files.getLang().getString("kill-streaks.kills-" + streak + ".subtitle")
+                lang.getString("kill-streaks.kills-" + streak + ".title"),
+                lang.getString("kill-streaks.kills-" + streak + ".subtitle")
         );
         builder.setTime(
-                files.getLang().getInt("kill-streaks.fade-in"),
-                files.getLang().getInt("kill-streaks.stay"),
-                files.getLang().getInt("kill-streaks.fade-out")
+                lang.getInt("kill-streaks.fade-in"),
+                lang.getInt("kill-streaks.stay"),
+                lang.getInt("kill-streaks.fade-out")
         );
         builder.send(player);
     }

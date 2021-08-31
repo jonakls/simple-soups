@@ -1,5 +1,6 @@
 package me.gardendev.simplesoups.loader;
 
+import me.gardendev.simplesoups.PluginCore;
 import me.gardendev.simplesoups.SimpleSoups;
 import me.gardendev.simplesoups.manager.FileManager;
 import me.gardendev.simplesoups.api.Loader;
@@ -12,8 +13,8 @@ public class FilesLoader implements Loader {
     private FileManager lang;
     private FileManager kits;
 
-    public FilesLoader(SimpleSoups plugin){
-        this.plugin = plugin;
+    public FilesLoader(PluginCore pluginCore){
+        this.plugin = pluginCore.getPlugin();
     }
 
     @Override
