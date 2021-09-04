@@ -1,7 +1,8 @@
 package me.gardendev.simplesoups.gui;
 
+import me.gardendev.simplesoups.PluginCore;
 import me.gardendev.simplesoups.builders.ItemBuilder;
-import me.gardendev.simplesoups.loader.FilesLoader;
+import me.gardendev.simplesoups.manager.FileManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
@@ -9,30 +10,32 @@ import org.bukkit.inventory.ItemStack;
 
 public class KitsGUI {
 
-    private final FilesLoader files;
+    private final FileManager kits;
+    private final FileManager guis;
 
-    public KitsGUI(FilesLoader files) {
-        this.files = files;
+    public KitsGUI(PluginCore pluginCore) {
+        this.kits = pluginCore.getFilesLoader().getKits();
+        this.guis = pluginCore.getFilesLoader().getGui();
     }
 
     public Inventory kits() {
         Inventory inventory = Bukkit.createInventory(
                 null,
-                files.getGui().getInt("kits.size"),
-                files.getGui().getString("kits.title")
+                guis.getInt("kits.size"),
+                guis.getString("kits.title")
         );
 
-        for (String path : files.getKits().getConfigurationSection("kits").getKeys(false)) {
+        for (String path : kits.getConfigurationSection("kits").getKeys(false)) {
 
             ItemBuilder builder = new ItemBuilder(
-                    Material.valueOf(files.getKits().getString("kits." + path + ".icon.material")),
+                    Material.valueOf(kits.getString("kits." + path + ".icon.material")),
                     1,
-                    files.getKits().getString("kits." + path + ".icon.display"),
-                    files.getKits().getStringList("kits." + path + ".icon.lore")
+                    kits.getString("kits." + path + ".icon.display"),
+                    kits.getStringList("kits." + path + ".icon.lore")
             );
 
             inventory.setItem(
-                    files.getKits().getInt("kits." + path + ".icon.slot-menu"),
+                    kits.getInt("kits." + path + ".icon.slot-menu"),
                     builder.getItem()
             );
 
@@ -45,7 +48,7 @@ public class KitsGUI {
         Inventory inventory = Bukkit.createInventory(
                 null,
                 36,
-                files.getGui().getString("refill.title")
+                guis.getString("refill.title")
         );
 
         for(int i = 0; i < inventory.getSize() ; i++) {
