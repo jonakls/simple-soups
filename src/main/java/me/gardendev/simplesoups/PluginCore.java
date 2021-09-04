@@ -42,7 +42,7 @@ public class PluginCore implements Core{
         );
 
         this.database();
-        kitsGUI = new KitsGUI(filesLoader);
+        kitsGUI = new KitsGUI(this);
         playerCache = new PlayerCache(this);
         gameScoreboard = new GameScoreboard(this);
     }

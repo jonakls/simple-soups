@@ -15,12 +15,13 @@ public class SQLConnection implements IConnection {
     private Connection connection;
 
     public SQLConnection(PluginCore core) {
+
         this.file = new File(core.getPlugin().getDataFolder(),
                 core.getFilesLoader().getConfig().getString("database.database-name") + ".db");
 
-        if (!file.exists()) {
+        if (!this.file.exists()) {
             try {
-                file.createNewFile();
+                this.file.createNewFile();
             }catch (IOException e){
                 e.printStackTrace();
             }
@@ -30,6 +31,7 @@ public class SQLConnection implements IConnection {
     @Override
     public void load() {
         try {
+
             Class.forName("org.sqlite.JDBC");
         }catch (ClassNotFoundException e) {
             e.printStackTrace();
