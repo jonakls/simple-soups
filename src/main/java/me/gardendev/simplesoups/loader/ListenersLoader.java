@@ -4,7 +4,6 @@ import me.gardendev.simplesoups.PluginCore;
 import me.gardendev.simplesoups.SimpleSoups;
 import me.gardendev.simplesoups.listener.*;
 import me.gardendev.simplesoups.api.Loader;
-import me.jonakls.souplab.listener.*;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
@@ -23,11 +22,11 @@ public class ListenersLoader implements Loader {
         registerListeners(
                 new PlayerJoinListener(pluginCore),
                 new PlayerInteractListener(pluginCore),
-                new PlayerDropItemListener(pluginCore.getFilesLoader()),
+                new PlayerDropItemListener(pluginCore),
                 new InventoryClickListener(pluginCore),
-                new FoodChangeListener(pluginCore.getFilesLoader()),
-                new EntityDamageListener(pluginCore.getFilesLoader()),
-                new SignChangeListener(pluginCore.getFilesLoader()),
+                new FoodChangeListener(pluginCore),
+                new EntityDamageListener(pluginCore),
+                new SignChangeListener(pluginCore),
                 new BlockPlaceListener(pluginCore),
                 new PlayerDeathListener(pluginCore),
                 new PlayerPickupListener(pluginCore),
