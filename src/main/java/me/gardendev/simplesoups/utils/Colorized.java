@@ -15,14 +15,6 @@ public class Colorized {
         }
     }
 
-    public static String[] applyArray(String...strings) {
-        String[] colorized = new String[strings.length + 1];
-        for(int i = 0 ; i < strings.length ; i++) {
-            colorized[i] = ChatColor.translateAlternateColorCodes('&', strings[i]);
-        }
-        return colorized;
-    }
-
     public static String remove(String path) {
         return ChatColor.stripColor(path);
     }
