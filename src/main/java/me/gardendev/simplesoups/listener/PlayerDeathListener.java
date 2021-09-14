@@ -1,6 +1,7 @@
 package me.gardendev.simplesoups.listener;
 
 import me.gardendev.simplesoups.SimpleSoups;
+import me.gardendev.simplesoups.handlers.DeathMessagesHandler;
 import me.gardendev.simplesoups.manager.FileManager;
 import me.gardendev.simplesoups.PluginCore;
 import me.gardendev.simplesoups.builders.ItemBuilder;
@@ -19,12 +20,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.metadata.FixedMetadataValue;
-
-import java.util.List;
-import java.util.Random;
 
 public class PlayerDeathListener implements Listener {
 
@@ -34,6 +31,7 @@ public class PlayerDeathListener implements Listener {
     private final FileManager config;
     private final KillStreakManager killStreak;
     private final KillStreakHandler killStreakHandler;
+    private final DeathMessagesHandler deathMessages;
 
     public PlayerDeathListener(PluginCore pluginCore) {
         this.plugin = pluginCore.getPlugin();
@@ -42,6 +40,7 @@ public class PlayerDeathListener implements Listener {
         this.config = pluginCore.getFilesLoader().getConfig();
         this.killStreak = pluginCore.getManagers().getKillStreakManager();
         this.killStreakHandler = pluginCore.getHandlersLoader().getKillStreakHandler();
+        this.deathMessages = pluginCore.getHandlersLoader().getDeathMessagesHandler();
     }
 
     @EventHandler
@@ -62,7 +61,6 @@ public class PlayerDeathListener implements Listener {
             killStreak.reset(player);
             killStreakHandler.actions(killer);
         }
-
     }
 
     @EventHandler
@@ -70,42 +68,11 @@ public class PlayerDeathListener implements Listener {
         Player player = event.getEntity();
         Player killer = player.getKiller();
 
-        String prefix = lang.getString("prefix");
-        Random random = new Random();
-        EntityDamageEvent.DamageCause damageCause = player.getLastDamageCause().getCause();
         if (killer == null) {
-            if (damageCause.equals(EntityDamageEvent.DamageCause.FALL)) {
-                Bukkit.broadcastMessage(prefix + lang.getString("kill-messages.death-by-fall-damage")
-                        .replace("%player%", player.getName()));
-                return;
-            }
-            if (damageCause.equals(EntityDamageEvent.DamageCause.LAVA)) {
-                Bukkit.broadcastMessage(prefix + lang.getString("kill-messages.death-by-lava")
-                        .replace("%player%", player.getName()));
-                return;
-            }
-            if (damageCause.equals(EntityDamageEvent.DamageCause.FIRE) ||
-                    damageCause.equals(EntityDamageEvent.DamageCause.FIRE_TICK)) {
-
-                Bukkit.broadcastMessage(prefix + lang.getString("kill-messages.death-by-fire")
-                        .replace("%player%", player.getName()));
-                return;
-            }
-            if (damageCause.equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) ||
-                    damageCause.equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION)) {
-
-                Bukkit.broadcastMessage(prefix + lang.getString("kill-messages.death-by-explosion")
-                        .replace("%player%", player.getName()));
-                return;
-            }
-            Bukkit.broadcastMessage(prefix + lang.getString("kill-messages.death-by-unknown")
-                    .replace("%player%", player.getName()));
+            deathMessages.objectsDamage(player);
             return;
         }
-        List<String> killsMessages = lang.getStringList("kill-messages.with-players");
-        Bukkit.broadcastMessage(prefix + killsMessages.get(random.nextInt(killsMessages.size()))
-                .replace("%player%", player.getName())
-                .replace("%killer%", killer.getName()));
+        deathMessages.playersDamage(player, killer);
 
     }
 

@@ -1,6 +1,7 @@
 package me.gardendev.simplesoups.manager;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -85,5 +86,13 @@ public class FileManager extends YamlConfiguration {
         List<String> list = super.getStringList(path);
         list.replaceAll(line -> ChatColor.translateAlternateColorCodes('&', line));
         return list;
+    }
+
+    public Material getMaterial(String path) {
+        try{
+            return Material.valueOf(super.getString(path));
+        } catch (IllegalArgumentException | NullPointerException e) {
+            return Material.BEDROCK;
+        }
     }
 }
