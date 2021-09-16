@@ -1,9 +1,7 @@
 package me.gardendev.simplesoups;
 
 import me.gardendev.simplesoups.gui.KitsGUI;
-import me.gardendev.simplesoups.handlers.KillStreakHandler;
 import me.gardendev.simplesoups.loader.*;
-import me.gardendev.simplesoups.manager.KillStreakManager;
 import me.gardendev.simplesoups.storage.PlayerCache;
 import me.gardendev.simplesoups.api.Core;
 import me.gardendev.simplesoups.api.Loader;
@@ -16,9 +14,9 @@ public class PluginCore implements Core{
 
     private final SimpleSoups plugin;
 
-    private final FilesLoader filesLoader = new FilesLoader(this);
-    private final ManagerLoader managerLoader = new ManagerLoader();
-    private final HandlersLoader handlersLoader = new HandlersLoader(this);
+    private FilesLoader filesLoader;
+    private ManagerLoader managerLoader;
+    private HandlersLoader handlersLoader;
 
     private KitsGUI kitsGUI;
     private PlayerCache playerCache;
@@ -34,24 +32,24 @@ public class PluginCore implements Core{
     public void init() {
 
         initLoaders(
-                filesLoader,
+                this.filesLoader = new FilesLoader(this),
+                this.handlersLoader = new HandlersLoader(this),
+                this.managerLoader = new ManagerLoader(),
                 new CommandsLoader(this),
-                new ListenersLoader(this),
-                managerLoader,
-                handlersLoader
+                new ListenersLoader(this)
         );
 
         this.database();
         kitsGUI = new KitsGUI(this);
         playerCache = new PlayerCache(this);
         gameScoreboard = new GameScoreboard(this);
+        gameScoreboard.runTaskUpdate();
     }
 
     private void database() {
         this.getPlugin().getLogger().info("Loading database...");
         this.connection = new SQLConnection(this);
         this.connection.load();
-
         this.storage = new DataStorage(this.connection, this);
     }
 
