@@ -2,6 +2,7 @@ package me.gardendev.simplesoups.scoreboard;
 
 import fr.mrmicky.fastboard.FastBoard;
 import me.gardendev.simplesoups.PluginCore;
+import me.gardendev.simplesoups.SimpleSoups;
 import me.gardendev.simplesoups.manager.FileManager;
 import me.gardendev.simplesoups.storage.PlayerCache;
 import org.bukkit.entity.Player;
@@ -12,12 +13,14 @@ public class GameScoreboard {
 
     private final FileManager lang;
     private final PlayerCache playerCache;
+    private final SimpleSoups plugin;
 
     private final Map<UUID, FastBoard> boards = new HashMap<>();
 
     public GameScoreboard(PluginCore pluginCore) {
         this.playerCache = pluginCore.getPlayerCache();
         this.lang = pluginCore.getFilesLoader().getLang();
+        this.plugin = pluginCore.getPlugin();
     }
 
     public void create(Player player) {
@@ -52,6 +55,14 @@ public class GameScoreboard {
                 .replace("%player_deaths%", "" + this.playerCache.getDeaths(fastBoard.getPlayer()))
         );
         fastBoard.updateLines(lines);
+    }
+
+    public void runTaskUpdate() {
+        plugin.getServer().getScheduler().runTaskTimer(plugin, () -> {
+            for (FastBoard board : getBoards().values()) {
+                this.update(board);
+            }
+        },0,20L);
     }
 
     public void delete(Player player) {

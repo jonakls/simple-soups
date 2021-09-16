@@ -13,15 +13,6 @@ public final class SimpleSoups extends JavaPlugin {
         getLogger().info("Loading SoupLab v" + getDescription().getVersion());
         this.core.init();
 
-        getServer().getScheduler().runTaskTimer(this,() -> {
-
-            for(FastBoard board : core.gameScoreboard().getBoards().values()) {
-
-                core.gameScoreboard().update(board);
-            }
-
-        }, 0 , 20L);
-
     }
 
     @Override
