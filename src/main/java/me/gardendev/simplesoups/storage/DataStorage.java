@@ -9,12 +9,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class DataStorage {
 
-    private final ExecutorService EXECUTOR = Executors.newCachedThreadPool();
     private final IConnection connection;
     private final PluginCore pluginCore;
     private final FileManager config;
@@ -27,43 +24,41 @@ public class DataStorage {
     }
 
     private void initialize() {
-        EXECUTOR.submit(() -> {
-            try {
-                Connection con = connection.getConnection();
-                PreparedStatement statement = con.prepareStatement(
-                        "CREATE TABLE IF NOT EXISTS " + config.getString("database.table")
-                                + " (id VARCHAR(36) PRIMARY KEY, name VARCHAR(60), kills INTEGER, deaths INTEGER, xp INTEGER)"
-                );
-                statement.execute();
-                pluginCore.getPlugin().getLogger().info("Loading database success!");
+        try {
+            Connection con = connection.getConnection();
+            PreparedStatement statement = con.prepareStatement(
+                    "CREATE TABLE IF NOT EXISTS " + config.getString("database.table") +
+                            " (id VARCHAR(36) PRIMARY KEY," +
+                            " name VARCHAR(60)," +
+                            " kills INTEGER," +
+                            " deaths INTEGER," +
+                            " xp INTEGER)"
+            );
+            statement.execute();
+            pluginCore.getPlugin().getLogger().info("Loading database success!");
 
-            }catch (SQLException e){
-                e.printStackTrace();
-            }
-
-        });
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 
     public void insert(PlayerCache cache, Player player) {
-        EXECUTOR.submit(() -> {
-            try {
-                Connection con = connection.getConnection();
-                PreparedStatement statement = con.prepareStatement(
-                        "REPLACE INTO " + config.getString("database.table") + " (id, name, kills, deaths, xp) VALUES (?, ?, ?, ?, ?)"
-                );
-                statement.setString(1, cache.getId(player).toLowerCase());
-                statement.setString(2, player.getName());
-                statement.setInt(3, cache.getKills(player));
-                statement.setInt(4, cache.getDeaths(player));
-                statement.setInt(5, cache.getXp(player));
+        try {
+            Connection con = connection.getConnection();
+            PreparedStatement statement = con.prepareStatement(
+                    "REPLACE INTO " + config.getString("database.table") + " (id, name, kills, deaths, xp) VALUES (?, ?, ?, ?, ?)"
+            );
+            statement.setString(1, cache.getId(player).toString());
+            statement.setString(2, player.getName());
+            statement.setInt(3, cache.getKills(player));
+            statement.setInt(4, cache.getDeaths(player));
+            statement.setInt(5, cache.getXp(player));
 
-                statement.execute();
+            statement.execute();
 
-            }catch (SQLException e){
-                e.printStackTrace();
-            }
-
-        });
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 
     public int getKills(String id) {
@@ -73,8 +68,10 @@ public class DataStorage {
 
             ResultSet result = statement.executeQuery();
 
+
             while (result.next()) {
                 if(result.getString("id").equalsIgnoreCase(id.toLowerCase())) {
+                    pluginCore.getPlugin().getLogger().info("Kills: " + result.getInt("kills"));
                     return result.getInt("kills");
                 }
             }
