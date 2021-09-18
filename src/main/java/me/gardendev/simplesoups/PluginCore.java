@@ -30,18 +30,17 @@ public class PluginCore implements Core{
 
     @Override
     public void init() {
-
+        this.filesLoader = new FilesLoader(this);
+        this.filesLoader.load();
+        this.database();
+        playerCache = new PlayerCache(this);
         initLoaders(
-                this.filesLoader = new FilesLoader(this),
                 this.handlersLoader = new HandlersLoader(this),
                 this.managerLoader = new ManagerLoader(),
                 new CommandsLoader(this),
                 new ListenersLoader(this)
         );
-
-        this.database();
         kitsGUI = new KitsGUI(this);
-        playerCache = new PlayerCache(this);
         gameScoreboard = new GameScoreboard(this);
         gameScoreboard.runTaskUpdate();
     }
