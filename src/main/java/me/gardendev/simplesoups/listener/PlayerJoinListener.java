@@ -22,7 +22,7 @@ public class PlayerJoinListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onJoinLoadData(PlayerJoinEvent event) {
+    public void loadPlayerData(PlayerJoinEvent event) {
         pluginCore.getPlugin().getServer().getLogger().info("[SoupPvP]: Load data of " + event.getPlayer().getName());
         pluginCore.getPlayerCache().loadPlayerData(event.getPlayer());
     }
@@ -33,7 +33,7 @@ public class PlayerJoinListener implements Listener {
     }
 
     @EventHandler
-    public void onJoinItems(PlayerJoinEvent event) {
+    public void joinPlayerItems(PlayerJoinEvent event) {
         FilesLoader file = pluginCore.getFilesLoader();
         event.getPlayer().setMetadata("status", new FixedMetadataValue(pluginCore.getPlugin(), GameStatus.SPAWN));
         if (!file.getConfig().getBoolean("items-on-join")) return;
@@ -61,7 +61,7 @@ public class PlayerJoinListener implements Listener {
     }
 
     @EventHandler
-    public void onJoinTeleport(PlayerJoinEvent event) {
+    public void joinPlayerTeleport(PlayerJoinEvent event) {
         FilesLoader file = pluginCore.getFilesLoader();
 
         if(!file.getConfig().getBoolean("join-teleport")) return;
