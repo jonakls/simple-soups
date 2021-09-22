@@ -4,13 +4,11 @@ import me.gardendev.simplesoups.SimpleSoups;
 import me.gardendev.simplesoups.handlers.DeathMessagesHandler;
 import me.gardendev.simplesoups.manager.FileManager;
 import me.gardendev.simplesoups.PluginCore;
-import me.gardendev.simplesoups.builders.ItemBuilder;
-import me.gardendev.simplesoups.builders.TitleBuilder;
+import me.gardendev.simplesoups.utils.*;
 import me.gardendev.simplesoups.enums.GameStatus;
 import me.gardendev.simplesoups.handlers.KillStreakHandler;
 import me.gardendev.simplesoups.manager.KillStreakManager;
 import me.gardendev.simplesoups.storage.PlayerCache;
-import me.gardendev.simplesoups.utils.CountdownTimer;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -84,17 +82,17 @@ public class PlayerDeathListener implements Listener {
         event.getEntity().spigot().respawn();
         event.setKeepInventory(true);
         event.getEntity().getInventory().clear();
-        event.getEntity().getInventory().setBoots(null);
-        event.getEntity().getInventory().setLeggings(null);
-        event.getEntity().getInventory().setChestplate(null);
-        event.getEntity().getInventory().setHelmet(null);
+        //event.getEntity().getInventory().setBoots(null);
+        //event.getEntity().getInventory().setLeggings(null);
+        //event.getEntity().getInventory().setChestplate(null);
+        //event.getEntity().getInventory().setHelmet(null);
         event.setNewLevel(0);
         event.setDroppedExp(0);
 
         String prefix = lang.getString("prefix");
 
-        ItemBuilder builder = new ItemBuilder(
-                Material.valueOf(config.getString("items-join.kits.material")),
+        ItemFactory builder = new ItemFactory(
+                config.getMaterial("items-join.kits.material"),
                 1,
                 config.getString("items-join.kits.display"),
                 config.getStringList("items-join.kits.lore")
@@ -105,7 +103,7 @@ public class PlayerDeathListener implements Listener {
                 builder.getItem()
         );
 
-        TitleBuilder title = new TitleBuilder(
+        TitleFactory title = new TitleFactory(
                 lang.getString("titles.player-death.title"),
                 lang.getString("titles.player-death.sub-title")
         );
