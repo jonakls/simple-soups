@@ -1,4 +1,4 @@
-package me.gardendev.simplesoups.builders;
+package me.gardendev.simplesoups.utils;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -7,26 +7,26 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
 
-public class ItemBuilder {
+public class ItemFactory {
 
     private final ItemStack item;
 
-    public ItemBuilder(Material material) {
+    public ItemFactory(Material material) {
         this.item = new ItemStack(material);
     }
 
-    public ItemBuilder(Material material, int amount) {
+    public ItemFactory(Material material, int amount) {
         this.item = new ItemStack(material, amount);
     }
 
-    public ItemBuilder(Material material, int amount, String itemName) {
+    public ItemFactory(Material material, int amount, String itemName) {
         this.item = new ItemStack(material, amount);
         ItemMeta meta = this.item.getItemMeta();
         meta.setDisplayName(itemName);
         this.item.setItemMeta(meta);
     }
 
-    public ItemBuilder(Material material, int amount, String itemName, List<String> loreItem) {
+    public ItemFactory(Material material, int amount, String itemName, List<String> loreItem) {
         this.item = new ItemStack(material, amount);
         ItemMeta meta = this.item.getItemMeta();
         meta.setLore(loreItem);
@@ -34,7 +34,7 @@ public class ItemBuilder {
         this.item.setItemMeta(meta);
     }
 
-    public ItemBuilder(String[] strings) {
+    public ItemFactory(String[] strings) {
         switch (strings.length) {
             case 1:
                 this.item = new ItemStack(Material.valueOf(strings[0]));
