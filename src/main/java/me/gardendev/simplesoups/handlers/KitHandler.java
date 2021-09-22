@@ -1,8 +1,8 @@
 package me.gardendev.simplesoups.handlers;
 
 import me.gardendev.simplesoups.PluginCore;
-import me.gardendev.simplesoups.builders.ItemBuilder;
-import me.gardendev.simplesoups.builders.TitleBuilder;
+import me.gardendev.simplesoups.utils.ItemFactory;
+import me.gardendev.simplesoups.utils.TitleFactory;
 import me.gardendev.simplesoups.enums.GameStatus;
 import me.gardendev.simplesoups.loader.FilesLoader;
 import org.bukkit.entity.Player;
@@ -39,7 +39,7 @@ public class KitHandler {
             inventory.setLeggings(null);
             inventory.setBoots(null);
 
-            TitleBuilder builder = new TitleBuilder(
+            TitleFactory builder = new TitleFactory(
                     file.getLang().getString("titles.select-kit.title").replace("%kit%", kitName),
                     file.getLang().getString("titles.select-kit.sub-title").replace("%kit%", kitName)
             );
@@ -60,10 +60,10 @@ public class KitHandler {
 
                 if (path.toLowerCase().equals(kitName)) {
 
-                    ItemBuilder helmet = new ItemBuilder(file.getKits().getString("kits." + path + ".armor.head").split(";"));
-                    ItemBuilder body = new ItemBuilder(file.getKits().getString("kits." + path + ".armor.body").split(";"));
-                    ItemBuilder leggins = new ItemBuilder(file.getKits().getString("kits." + path + ".armor.leggins").split(";"));
-                    ItemBuilder boats = new ItemBuilder(file.getKits().getString("kits." + path + ".armor.boats").split(";"));
+                    ItemFactory helmet = new ItemFactory(file.getKits().getString("kits." + path + ".armor.head").split(";"));
+                    ItemFactory body = new ItemFactory(file.getKits().getString("kits." + path + ".armor.body").split(";"));
+                    ItemFactory leggins = new ItemFactory(file.getKits().getString("kits." + path + ".armor.leggins").split(";"));
+                    ItemFactory boats = new ItemFactory(file.getKits().getString("kits." + path + ".armor.boats").split(";"));
 
                     inventory.setHelmet(helmet.getItem());
 
@@ -79,7 +79,7 @@ public class KitHandler {
 
                         String[] strings = items.get(i).split(";");
 
-                        ItemBuilder itemBuilder = new ItemBuilder(strings);
+                        ItemFactory itemBuilder = new ItemFactory(strings);
 
                         inventory.setItem(i, itemBuilder.getItem());
 

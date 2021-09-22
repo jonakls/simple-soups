@@ -1,7 +1,7 @@
 package me.gardendev.simplesoups.listener;
 
 import me.gardendev.simplesoups.PluginCore;
-import me.gardendev.simplesoups.builders.ItemBuilder;
+import me.gardendev.simplesoups.utils.ItemFactory;
 import me.gardendev.simplesoups.enums.GameStatus;
 import me.gardendev.simplesoups.loader.FilesLoader;
 import org.bukkit.Bukkit;
@@ -47,7 +47,7 @@ public class PlayerJoinListener implements Listener {
 
         }
 
-        ItemBuilder builder = new ItemBuilder(
+        ItemFactory builder = new ItemFactory(
                 Material.valueOf(file.getConfig().getString("items-join.kits.material")),
                 1,
                 file.getConfig().getString("items-join.kits.display"),

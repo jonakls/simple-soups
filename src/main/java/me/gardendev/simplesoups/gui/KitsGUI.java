@@ -1,7 +1,7 @@
 package me.gardendev.simplesoups.gui;
 
 import me.gardendev.simplesoups.PluginCore;
-import me.gardendev.simplesoups.builders.ItemBuilder;
+import me.gardendev.simplesoups.utils.ItemFactory;
 import me.gardendev.simplesoups.manager.FileManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -27,7 +27,7 @@ public class KitsGUI {
 
         for (String path : kits.getConfigurationSection("kits").getKeys(false)) {
 
-            ItemBuilder builder = new ItemBuilder(
+            ItemFactory builder = new ItemFactory(
                     Material.valueOf(kits.getString("kits." + path + ".icon.material")),
                     1,
                     kits.getString("kits." + path + ".icon.display"),

@@ -3,7 +3,7 @@ package me.gardendev.simplesoups.handlers;
 import me.gardendev.simplesoups.PluginCore;
 import me.gardendev.simplesoups.manager.FileManager;
 import me.gardendev.simplesoups.manager.KillStreakManager;
-import me.gardendev.simplesoups.builders.TitleBuilder;
+import me.gardendev.simplesoups.utils.TitleFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -76,7 +76,7 @@ public class KillStreakHandler {
     }
 
     private void title(Player player, int streak) {
-        TitleBuilder builder = new TitleBuilder(
+        TitleFactory builder = new TitleFactory(
                 lang.getString("kill-streaks.kills-" + streak + ".title"),
                 lang.getString("kill-streaks.kills-" + streak + ".subtitle")
         );
