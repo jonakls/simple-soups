@@ -12,7 +12,7 @@ regeneration-soup-value: 5.0
 database:
   enable: false
   database-name: 'SoupPvP'
-  table: 'soup'
+  table: 'simplesoups'
   user: 'root'
   ip: 'localhost'
   password: 'mypassword'
