@@ -16,8 +16,11 @@ public class DataStorage {
     private final PluginCore pluginCore;
     private final FileManager config;
 
+    private final String table;
+
     public DataStorage(IConnection connection, PluginCore pluginCore) {
         this.pluginCore = pluginCore;
+        this.table = pluginCore.getFilesLoader().getConfig().getString("database.table");
         this.config = pluginCore.getFilesLoader().getConfig();
         this.connection = connection;
         this.initialize();
@@ -27,7 +30,7 @@ public class DataStorage {
         try {
             Connection con = connection.getConnection();
             PreparedStatement statement = con.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS " + config.getString("database.table") +
+                    "CREATE TABLE IF NOT EXISTS " + table +
                             " (id VARCHAR(36) PRIMARY KEY," +
                             " name VARCHAR(60)," +
                             " kills INTEGER," +
@@ -46,7 +49,7 @@ public class DataStorage {
         try {
             Connection con = connection.getConnection();
             PreparedStatement statement = con.prepareStatement(
-                    "REPLACE INTO " + config.getString("database.table") + " (id, name, kills, deaths, xp) VALUES (?, ?, ?, ?, ?)"
+                    "REPLACE INTO " + table + " (id, name, kills, deaths, xp) VALUES (?, ?, ?, ?, ?)"
             );
             statement.setString(1, cache.getId(player).toString());
             statement.setString(2, player.getName());
@@ -64,7 +67,7 @@ public class DataStorage {
     public int getKills(String id) {
         try {
             Connection con = connection.getConnection();
-            PreparedStatement statement = con.prepareStatement("SELECT * FROM " + config.getString("database.table") + " WHERE id = '" + id + "'");
+            PreparedStatement statement = con.prepareStatement("SELECT * FROM " + table + " WHERE id = '" + id + "'");
 
             ResultSet result = statement.executeQuery();
 
@@ -84,7 +87,7 @@ public class DataStorage {
     public int getDeaths(String id) {
         try {
             Connection con = connection.getConnection();
-            PreparedStatement statement = con.prepareStatement("SELECT * FROM " + config.getString("database.table") + " WHERE id = '" + id + "'");
+            PreparedStatement statement = con.prepareStatement("SELECT * FROM " + table + " WHERE id = '" + id + "'");
 
             ResultSet result = statement.executeQuery();
 
@@ -102,7 +105,7 @@ public class DataStorage {
     public int getXp(String id) {
         try {
             Connection con = connection.getConnection();
-            PreparedStatement statement = con.prepareStatement("SELECT * FROM " + config.getString("database.table") + " WHERE id = '" + id + "'");
+            PreparedStatement statement = con.prepareStatement("SELECT * FROM " + table + " WHERE id = '" + id + "'");
 
             ResultSet result = statement.executeQuery();
 
