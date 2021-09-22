@@ -19,6 +19,11 @@ public class PlayerQuitListener implements Listener {
     }
 
     @EventHandler
+    public void saveOnQuit(PlayerQuitEvent event) {
+        pluginCore.getPlayerCache().savePlayerData(event.getPlayer());
+    }
+
+    @EventHandler
     public void deleteScoreboard(PlayerQuitEvent event) {
         pluginCore.gameScoreboard().delete(event.getPlayer());
     }

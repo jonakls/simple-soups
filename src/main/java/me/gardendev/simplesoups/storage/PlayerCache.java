@@ -30,15 +30,20 @@ public class PlayerCache {
         for (Player player : players) {
             this.storage.insert(this, player);
             players.remove(player);
-            kills.remove(player.getUniqueId());
+            this.id.remove(player.getUniqueId());
+            this.kills.remove(player.getUniqueId());
+            this.deaths.remove(player.getUniqueId());
+            this.xp.remove(player.getUniqueId());
         }
     }
 
     public void savePlayerData(Player player) {
         this.storage.insert(this, player);
         this.players.remove(player);
+        this.id.remove(player.getUniqueId());
         this.kills.remove(player.getUniqueId());
-
+        this.deaths.remove(player.getUniqueId());
+        this.xp.remove(player.getUniqueId());
     }
 
     public void loadPlayerData(Player player) {
