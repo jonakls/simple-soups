@@ -1,9 +1,8 @@
 package me.gardendev.simplesoups.storage;
 
 import me.gardendev.simplesoups.PluginCore;
-import me.gardendev.simplesoups.manager.FileManager;
+import me.gardendev.simplesoups.storage.cache.DataCache;
 import me.gardendev.simplesoups.storage.database.IConnection;
-import org.bukkit.entity.Player;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,21 +13,17 @@ public class DataStorage {
 
     private final IConnection connection;
     private final PluginCore pluginCore;
-    private final FileManager config;
-
     private final String table;
 
     public DataStorage(IConnection connection, PluginCore pluginCore) {
         this.pluginCore = pluginCore;
         this.table = pluginCore.getFilesLoader().getConfig().getString("database.table");
-        this.config = pluginCore.getFilesLoader().getConfig();
         this.connection = connection;
         this.initialize();
     }
 
     private void initialize() {
-        try {
-            Connection con = connection.getConnection();
+        try (Connection con = connection.getConnection()) {
             PreparedStatement statement = con.prepareStatement(
                     "CREATE TABLE IF NOT EXISTS " + table +
                             " (id VARCHAR(36) PRIMARY KEY," +
@@ -45,17 +40,18 @@ public class DataStorage {
         }
     }
 
-    public void insert(PlayerCache cache, Player player) {
-        try {
-            Connection con = connection.getConnection();
-            PreparedStatement statement = con.prepareStatement(
-                    "REPLACE INTO " + table + " (id, name, kills, deaths, xp) VALUES (?, ?, ?, ?, ?)"
-            );
-            statement.setString(1, cache.getId(player).toString());
-            statement.setString(2, player.getName());
-            statement.setInt(3, cache.getKills(player));
-            statement.setInt(4, cache.getDeaths(player));
-            statement.setInt(5, cache.getXp(player));
+    public void insert(DataCache cache) {
+
+        String sqlInsert = "REPLACE INTO $table$ (id, name, kills, deaths, xp) VALUES (?, ?, ?, ?, ?)"
+                .replace("$table$", table);
+
+        try (Connection con = connection.getConnection()) {
+            PreparedStatement statement = con.prepareStatement(sqlInsert);
+            statement.setString(1, cache.getUuid());
+            statement.setString(2, cache.getPlayerName());
+            statement.setInt(3, cache.getKills());
+            statement.setInt(4, cache.getDeaths());
+            statement.setInt(5, cache.getXp());
 
             statement.execute();
 
@@ -65,16 +61,18 @@ public class DataStorage {
     }
 
     public int getKills(String id) {
-        try {
-            Connection con = connection.getConnection();
-            PreparedStatement statement = con.prepareStatement("SELECT * FROM " + table + " WHERE id = '" + id + "'");
+        try (Connection con = connection.getConnection()) {
+            PreparedStatement statement = con.prepareStatement(
+                    "SELECT * FROM $table$ WHERE id = '$id$'"
+                            .replace("$table$", table)
+                            .replace("$id$", id)
+            );
 
             ResultSet result = statement.executeQuery();
 
 
             while (result.next()) {
                 if(result.getString("id").equalsIgnoreCase(id.toLowerCase())) {
-                    pluginCore.getPlugin().getLogger().info("Kills: " + result.getInt("kills"));
                     return result.getInt("kills");
                 }
             }
@@ -85,8 +83,7 @@ public class DataStorage {
     }
 
     public int getDeaths(String id) {
-        try {
-            Connection con = connection.getConnection();
+        try (Connection con = connection.getConnection()) {
             PreparedStatement statement = con.prepareStatement("SELECT * FROM " + table + " WHERE id = '" + id + "'");
 
             ResultSet result = statement.executeQuery();
@@ -103,8 +100,7 @@ public class DataStorage {
     }
 
     public int getXp(String id) {
-        try {
-            Connection con = connection.getConnection();
+        try (Connection con = connection.getConnection()) {
             PreparedStatement statement = con.prepareStatement("SELECT * FROM " + table + " WHERE id = '" + id + "'");
 
             ResultSet result = statement.executeQuery();
