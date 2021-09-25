@@ -22,17 +22,18 @@ public class KillStreakManager {
         this.streakList = new HashMap<>();
     }
 
-    public void set(Player player, Integer streak) {
+    public void set(Player player, int streak) {
         this.streakList.put(player.getUniqueId(), streak);
     }
 
     public void add(Player player) {
-        int currentStreak = this.streakList.get(player.getUniqueId());
-        if (currentStreak == 0) {
+        Integer currentStreak = this.streakList.get(player.getUniqueId());
+        if (currentStreak == null) {
             this.set(player, 0);
+            currentStreak = 0;
         }
-        player.setLevel(currentStreak + 1);
         this.streakList.put(player.getUniqueId(), currentStreak + 1);
+        player.setLevel(currentStreak + 1);
     }
 
     public void reset(Player player) {
