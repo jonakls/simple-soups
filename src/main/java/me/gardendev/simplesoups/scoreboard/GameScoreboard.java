@@ -4,7 +4,8 @@ import fr.mrmicky.fastboard.FastBoard;
 import me.gardendev.simplesoups.PluginCore;
 import me.gardendev.simplesoups.SimpleSoups;
 import me.gardendev.simplesoups.manager.FileManager;
-import me.gardendev.simplesoups.storage.PlayerCache;
+import me.gardendev.simplesoups.storage.PlayerData;
+import me.gardendev.simplesoups.storage.cache.DataCache;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -12,47 +13,36 @@ import java.util.*;
 public class GameScoreboard {
 
     private final FileManager lang;
-    private final PlayerCache playerCache;
+    private final PlayerData playerData;
     private final SimpleSoups plugin;
 
     private final Map<UUID, FastBoard> boards = new HashMap<>();
 
     public GameScoreboard(PluginCore pluginCore) {
-        this.playerCache = pluginCore.getPlayerCache();
+        this.playerData = pluginCore.getPlayerData();
         this.lang = pluginCore.getFilesLoader().getLang();
         this.plugin = pluginCore.getPlugin();
     }
 
     public void create(Player player) {
         FastBoard board = new FastBoard(player);
-
-        board.updateTitle(lang.getString("scoreboard.title"));
-
-        List<String> lines = lang.getStringList("scoreboard.lines");
-
-        lines.replaceAll(line -> line
-                .replace("%player%", player.getName())
-                .replace("%player_xp%", "" + this.playerCache.getXp(player))
-                .replace("%player_kills%", "" + this.playerCache.getKills(player))
-                .replace("%player_deaths%", "" + this.playerCache.getDeaths(player))
-        );
-
-        board.updateLines(lines);
+        this.update(board);
         this.boards.put(player.getUniqueId(), board);
 
     }
 
     public void update(FastBoard fastBoard) {
 
+        Player player = fastBoard.getPlayer();
+        DataCache cache = this.playerData.getPlayerData(player);
+
         fastBoard.updateTitle(lang.getString("scoreboard.title"));
-
         List<String> lines = lang.getStringList("scoreboard.lines");
-
         lines.replaceAll(line -> line
-                .replace("%player%", fastBoard.getPlayer().getName())
-                .replace("%player_xp%", "" + this.playerCache.getXp(fastBoard.getPlayer()))
-                .replace("%player_kills%", "" + this.playerCache.getKills(fastBoard.getPlayer()))
-                .replace("%player_deaths%", "" + this.playerCache.getDeaths(fastBoard.getPlayer()))
+                .replace("%player%", player.getName())
+                .replace("%player_xp%", "" + cache.getXp())
+                .replace("%player_kills%", "" + cache.getKills())
+                .replace("%player_deaths%", "" + cache.getDeaths())
         );
         fastBoard.updateLines(lines);
     }

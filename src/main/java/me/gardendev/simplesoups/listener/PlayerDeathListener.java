@@ -4,15 +4,15 @@ import me.gardendev.simplesoups.SimpleSoups;
 import me.gardendev.simplesoups.handlers.DeathMessagesHandler;
 import me.gardendev.simplesoups.manager.FileManager;
 import me.gardendev.simplesoups.PluginCore;
+import me.gardendev.simplesoups.storage.PlayerData;
 import me.gardendev.simplesoups.utils.*;
 import me.gardendev.simplesoups.enums.GameStatus;
 import me.gardendev.simplesoups.handlers.KillStreakHandler;
 import me.gardendev.simplesoups.manager.KillStreakManager;
-import me.gardendev.simplesoups.storage.PlayerCache;
+import me.gardendev.simplesoups.storage.cache.DataCache;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,7 +24,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 public class PlayerDeathListener implements Listener {
 
     private final SimpleSoups plugin;
-    private final PlayerCache playerCache;
+    private final PlayerData playerCache;
     private final FileManager lang;
     private final FileManager config;
     private final KillStreakManager killStreak;
@@ -33,7 +33,7 @@ public class PlayerDeathListener implements Listener {
 
     public PlayerDeathListener(PluginCore pluginCore) {
         this.plugin = pluginCore.getPlugin();
-        this.playerCache = pluginCore.getPlayerCache();
+        this.playerCache = pluginCore.getPlayerData();
         this.lang = pluginCore.getFilesLoader().getLang();
         this.config = pluginCore.getFilesLoader().getConfig();
         this.killStreak = pluginCore.getManagers().getKillStreakManager();
@@ -52,8 +52,6 @@ public class PlayerDeathListener implements Listener {
             playerCache.incrementKills(killer);
             playerCache.incrementDeaths(player);
             playerCache.incrementXp(killer);
-            playerCache.registerPlayer(player);
-            playerCache.registerPlayer(killer);
 
             killStreak.add(killer);
             killStreak.reset(player);

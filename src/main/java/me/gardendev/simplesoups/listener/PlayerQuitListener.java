@@ -20,7 +20,7 @@ public class PlayerQuitListener implements Listener {
 
     @EventHandler
     public void saveOnQuit(PlayerQuitEvent event) {
-        pluginCore.getPlayerCache().savePlayerData(event.getPlayer());
+        pluginCore.getPlayerData().savePlayerData(event.getPlayer());
     }
 
     @EventHandler

@@ -24,7 +24,7 @@ public class PlayerJoinListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void loadPlayerData(PlayerJoinEvent event) {
         pluginCore.getPlugin().getServer().getLogger().info("[SoupPvP]: Load data of " + event.getPlayer().getName());
-        pluginCore.getPlayerCache().loadPlayerData(event.getPlayer());
+        pluginCore.getPlayerData().loadPlayerData(event.getPlayer());
     }
 
     @EventHandler
