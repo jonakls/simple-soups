@@ -76,14 +76,8 @@ public class MainCommand implements CommandExecutor{
         switch (args[0].toLowerCase()){
             case "save":
                 pluginCore.getStorage().insert(
-                        pluginCore.getPlayerCache(),
-                        player
+                        pluginCore.getPlayerData().getPlayerData(player)
                 );
-                break;
-            case "getData":
-
-                player.sendMessage("Datos");
-                player.sendMessage(player.getName() + ", kills: " + pluginCore.getStorage().getKills(player.getUniqueId().toString()));
                 break;
             case "reload":
                 lang.reload();
@@ -95,14 +89,16 @@ public class MainCommand implements CommandExecutor{
             case "kits":
                 player.openInventory(pluginCore.getKitsGUI().kits());
                 break;
+            /*
             case "stats":
-
                 player.sendMessage(Colorized.apply("&aYour stats &8| &c" + player.getName()));
                 player.sendMessage(" ");
                 player.sendMessage(Colorized.apply("&cKills: &f" + pluginCore.getPlayerCache().getKills(player)));
                 player.sendMessage(Colorized.apply("&cDeaths: &f" + pluginCore.getPlayerCache().getDeaths(player)));
                 player.sendMessage(Colorized.apply("&cXp: &f" + pluginCore.getPlayerCache().getXp(player) ));
                 break;
+
+            */
             case "editmode":
                 if(player.hasMetadata("status")) {
 
