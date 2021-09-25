@@ -2,7 +2,7 @@ package me.gardendev.simplesoups;
 
 import me.gardendev.simplesoups.gui.KitsGUI;
 import me.gardendev.simplesoups.loader.*;
-import me.gardendev.simplesoups.storage.PlayerCache;
+import me.gardendev.simplesoups.storage.PlayerData;
 import me.gardendev.simplesoups.api.Core;
 import me.gardendev.simplesoups.api.Loader;
 import me.gardendev.simplesoups.scoreboard.GameScoreboard;
@@ -19,7 +19,7 @@ public class PluginCore implements Core{
     private HandlersLoader handlersLoader;
 
     private KitsGUI kitsGUI;
-    private PlayerCache playerCache;
+    private PlayerData playerData;
     private IConnection connection;
     private DataStorage storage;
     private GameScoreboard gameScoreboard;
@@ -33,7 +33,7 @@ public class PluginCore implements Core{
         this.filesLoader = new FilesLoader(this);
         this.filesLoader.load();
         this.database();
-        playerCache = new PlayerCache(this);
+        playerData = new PlayerData(this);
         initLoaders(
                 this.handlersLoader = new HandlersLoader(this),
                 this.managerLoader = new ManagerLoader(),
@@ -78,8 +78,8 @@ public class PluginCore implements Core{
         return kitsGUI;
     }
 
-    public PlayerCache getPlayerCache() {
-        return playerCache;
+    public PlayerData getPlayerData() {
+        return playerData;
     }
 
     public DataStorage getStorage() {
