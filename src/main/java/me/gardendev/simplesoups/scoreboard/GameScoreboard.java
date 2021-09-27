@@ -13,6 +13,7 @@ import java.util.*;
 public class GameScoreboard {
 
     private final FileManager lang;
+    private final FileManager config;
     private final PlayerData playerData;
     private final SimpleSoups plugin;
 
@@ -21,6 +22,7 @@ public class GameScoreboard {
     public GameScoreboard(PluginCore pluginCore) {
         this.playerData = pluginCore.getPlayerData();
         this.lang = pluginCore.getFilesLoader().getLang();
+        this.config = pluginCore.getFilesLoader().getConfig();
         this.plugin = pluginCore.getPlugin();
     }
 
@@ -43,6 +45,7 @@ public class GameScoreboard {
                 .replace("%player_xp%", "" + cache.getXp())
                 .replace("%player_kills%", "" + cache.getKills())
                 .replace("%player_deaths%", "" + cache.getDeaths())
+                .replace("%player_kdr%", "" + cache.getKdr())
         );
         fastBoard.updateLines(lines);
     }
@@ -52,7 +55,7 @@ public class GameScoreboard {
             for (FastBoard board : getBoards().values()) {
                 this.update(board);
             }
-        },0,20L);
+        },0, config.getLong("scoreboard.update-ticks"));
     }
 
     public void delete(Player player) {
