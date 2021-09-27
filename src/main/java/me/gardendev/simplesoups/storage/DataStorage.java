@@ -22,16 +22,15 @@ public class DataStorage {
         this.initialize();
     }
 
+    final static String SELECT = "SELECT * FROM $table$ WHERE id = '$id$'";
+
     private void initialize() {
+
+        String sql = "CREATE TABLE IF NOT EXISTS $table$ (id VARCHAR(36) PRIMARY KEY, name VARCHAR(60), kills INTEGER, deaths INTEGER, xp INTEGER, kdr DECIMAL)"
+                .replace("$table$", table);
+
         try (Connection con = connection.getConnection()) {
-            PreparedStatement statement = con.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS " + table +
-                            " (id VARCHAR(36) PRIMARY KEY," +
-                            " name VARCHAR(60)," +
-                            " kills INTEGER," +
-                            " deaths INTEGER," +
-                            " xp INTEGER)"
-            );
+            PreparedStatement statement = con.prepareStatement(sql);
             statement.execute();
             pluginCore.getPlugin().getLogger().info("Loading database success!");
 
@@ -42,7 +41,7 @@ public class DataStorage {
 
     public void insert(DataCache cache) {
 
-        String sqlInsert = "REPLACE INTO $table$ (id, name, kills, deaths, xp) VALUES (?, ?, ?, ?, ?)"
+        String sqlInsert = "REPLACE INTO $table$ (id, name, kills, deaths, xp, kdr) VALUES (?, ?, ?, ?, ?, ?)"
                 .replace("$table$", table);
 
         try (Connection con = connection.getConnection()) {
@@ -52,6 +51,7 @@ public class DataStorage {
             statement.setInt(3, cache.getKills());
             statement.setInt(4, cache.getDeaths());
             statement.setInt(5, cache.getXp());
+            statement.setFloat(6, cache.getKdr());
 
             statement.execute();
 
@@ -61,16 +61,12 @@ public class DataStorage {
     }
 
     public int getKills(String id) {
+
         try (Connection con = connection.getConnection()) {
             PreparedStatement statement = con.prepareStatement(
-                    "SELECT * FROM $table$ WHERE id = '$id$'"
-                            .replace("$table$", table)
-                            .replace("$id$", id)
+                    SELECT.replace("$table$", table).replace("$id$", id)
             );
-
             ResultSet result = statement.executeQuery();
-
-
             while (result.next()) {
                 if(result.getString("id").equalsIgnoreCase(id.toLowerCase())) {
                     return result.getInt("kills");
@@ -83,8 +79,11 @@ public class DataStorage {
     }
 
     public int getDeaths(String id) {
+
         try (Connection con = connection.getConnection()) {
-            PreparedStatement statement = con.prepareStatement("SELECT * FROM " + table + " WHERE id = '" + id + "'");
+            PreparedStatement statement = con.prepareStatement(
+                    SELECT.replace("$table$", table).replace("$id$", id)
+            );
 
             ResultSet result = statement.executeQuery();
 
@@ -100,14 +99,36 @@ public class DataStorage {
     }
 
     public int getXp(String id) {
+
         try (Connection con = connection.getConnection()) {
-            PreparedStatement statement = con.prepareStatement("SELECT * FROM " + table + " WHERE id = '" + id + "'");
+            PreparedStatement statement = con.prepareStatement(
+                    SELECT.replace("$table$", table).replace("$id$", id)
+            );
 
             ResultSet result = statement.executeQuery();
 
             while (result.next()) {
                 if(result.getString("id").equalsIgnoreCase(id.toLowerCase())) {
                     return result.getInt("xp");
+                }
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public float getKDR(String id) {
+        try (Connection con = connection.getConnection()) {
+            PreparedStatement statement = con.prepareStatement(
+                    SELECT.replace("$table$", table).replace("$id$", id)
+            );
+
+            ResultSet result = statement.executeQuery();
+
+            while (result.next()) {
+                if(result.getString("id").equalsIgnoreCase(id.toLowerCase())) {
+                    return result.getInt("kdr");
                 }
             }
         }catch (SQLException e) {
