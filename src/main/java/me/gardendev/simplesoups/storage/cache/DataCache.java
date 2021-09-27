@@ -37,7 +37,7 @@ public class DataCache {
     }
 
     /*
-    public void setKits(String...kits) {
+    public void setKits(String kits) {
         this.kits.removeAll(Arrays.stream(kits).toList());
     }
     */
