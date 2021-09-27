@@ -9,7 +9,6 @@ import me.gardendev.simplesoups.utils.*;
 import me.gardendev.simplesoups.enums.GameStatus;
 import me.gardendev.simplesoups.handlers.KillStreakHandler;
 import me.gardendev.simplesoups.manager.KillStreakManager;
-import me.gardendev.simplesoups.storage.cache.DataCache;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -27,8 +26,8 @@ public class PlayerDeathListener implements Listener {
     private final PlayerData playerCache;
     private final FileManager lang;
     private final FileManager config;
-    private final KillStreakManager killStreak;
     private final KillStreakHandler killStreakHandler;
+    private final KillStreakManager killStreak;
     private final DeathMessagesHandler deathMessages;
 
     public PlayerDeathListener(PluginCore pluginCore) {
@@ -42,7 +41,7 @@ public class PlayerDeathListener implements Listener {
     }
 
     @EventHandler
-    public void killStreak(PlayerDeathEvent event) {
+    public void updateStats(PlayerDeathEvent event) {
 
         Player player = event.getEntity();
         Player killer = player.getKiller();
@@ -52,7 +51,8 @@ public class PlayerDeathListener implements Listener {
             playerCache.incrementKills(killer);
             playerCache.incrementDeaths(player);
             playerCache.incrementXp(killer);
-
+            playerCache.updateKDR(player);
+            playerCache.updateKDR(killer);
             killStreak.add(killer);
             killStreak.reset(player);
             killStreakHandler.actions(killer);
@@ -79,11 +79,7 @@ public class PlayerDeathListener implements Listener {
         );
         event.getEntity().spigot().respawn();
         event.setKeepInventory(true);
-        event.getEntity().getInventory().clear();
-        //event.getEntity().getInventory().setBoots(null);
-        //event.getEntity().getInventory().setLeggings(null);
-        //event.getEntity().getInventory().setChestplate(null);
-        //event.getEntity().getInventory().setHelmet(null);
+        PlayerUtils.clearInventory(event.getEntity());
         event.setNewLevel(0);
         event.setDroppedExp(0);
 
