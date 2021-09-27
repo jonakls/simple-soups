@@ -35,8 +35,8 @@ public class PluginCore implements Core{
         this.database();
         playerData = new PlayerData(this);
         initLoaders(
-                this.handlersLoader = new HandlersLoader(this),
                 this.managerLoader = new ManagerLoader(),
+                this.handlersLoader = new HandlersLoader(this),
                 new CommandsLoader(this),
                 new ListenersLoader(this)
         );
