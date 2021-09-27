@@ -8,10 +8,14 @@ items-on-join: true
 deny-build: true
 respawn-time: 5
 xp-per-kill: 5
+arrow-shot-message: true
 regeneration-soup-value: 5.0
+scoreboard:
+  enable: true
+  update-ticks: 20
 database:
   enable: false
-  database-name: 'SoupPvP'
+  database-name: 'database'
   table: 'simplesoups'
   user: 'root'
   ip: 'localhost'

@@ -1,14 +1,15 @@
 prefix: '&8[&cSoupPvP&8] '
 scoreboard:
-  title: '&7[&6&k|&c SOUP PVP &6&k|&7]'
+  title: '&8[&cSoupPvP&8]'
   lines:
     - '&r'
-    - '&cName: &6%player%'
-    - '&cXP: &6%player_xp%'
+    - '&e* &cName: &6%player%'
+    - '&e* &cXP: &6%player_xp%'
     - '&r'
     - '&e&nStatistics'
-    - '&cKills: &6%player_kills%'
-    - '&cDeaths: &6%player_deaths%'
+    - '&e* &cKills: &6%player_kills%'
+    - '&e* &cDeaths: &6%player_deaths%'
+    - '&e* &cKDR: &6%player_kdr%'
     - '&r'
     - '&emc.yourserver.net'
 error:
@@ -25,6 +26,7 @@ messages:
   death-countdown: '&7You just died. Reappears in &c%seconds% &7seconds.'
   enabled-edit-mode: '&7You''ve enabled edit mode.'
   disable-edit-mode: '&7You'' ha''ve disabled edit mode.'
+  arrow-message: '&7You just shot %player%, &c%value% ❤'
 kill-messages:
   death-by-fall-damage: '&c%player% &7fell to his death!'
   death-by-lava: '&c%player% &7thought he can swim in lava!'
