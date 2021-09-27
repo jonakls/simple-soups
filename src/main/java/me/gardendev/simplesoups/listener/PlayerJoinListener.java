@@ -1,9 +1,10 @@
 package me.gardendev.simplesoups.listener;
 
 import me.gardendev.simplesoups.PluginCore;
+import me.gardendev.simplesoups.manager.FileManager;
 import me.gardendev.simplesoups.utils.ItemFactory;
 import me.gardendev.simplesoups.enums.GameStatus;
-import me.gardendev.simplesoups.loader.FilesLoader;
+import me.gardendev.simplesoups.utils.PlayerUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -16,63 +17,58 @@ import org.bukkit.metadata.FixedMetadataValue;
 public class PlayerJoinListener implements Listener {
 
     private final PluginCore pluginCore;
+    private final FileManager config;
 
     public PlayerJoinListener(PluginCore pluginCore) {
         this.pluginCore = pluginCore;
+        this.config = pluginCore.getFilesLoader().getConfig();
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.NORMAL)
     public void loadPlayerData(PlayerJoinEvent event) {
-        pluginCore.getPlugin().getServer().getLogger().info("[SoupPvP]: Load data of " + event.getPlayer().getName());
+        pluginCore.getPlugin().getLogger().info("Load data of " + event.getPlayer().getName());
         pluginCore.getPlayerData().loadPlayerData(event.getPlayer());
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void loadScoreboard(PlayerJoinEvent event) {
+        if (!config.getBoolean("scoreboard.enable")) return;
         pluginCore.gameScoreboard().create(event.getPlayer());
     }
 
     @EventHandler
     public void joinPlayerItems(PlayerJoinEvent event) {
-        FilesLoader file = pluginCore.getFilesLoader();
         event.getPlayer().setMetadata("status", new FixedMetadataValue(pluginCore.getPlugin(), GameStatus.SPAWN));
-        if (!file.getConfig().getBoolean("items-on-join")) return;
-
-        if (file.getConfig().getBoolean("clear-on-join")){
-            event.getPlayer().getInventory().clear();
-            event.getPlayer().getInventory().setHelmet(null);
-            event.getPlayer().getInventory().setChestplate(null);
-            event.getPlayer().getInventory().setLeggings(null);
-            event.getPlayer().getInventory().setBoots(null);
-
+        if (!config.getBoolean("items-on-join")) return;
+        if (config.getBoolean("clear-on-join")){
+            PlayerUtils.clearInventory(event.getPlayer());
         }
 
-        ItemFactory builder = new ItemFactory(
-                Material.valueOf(file.getConfig().getString("items-join.kits.material")),
+        ItemFactory itemFactory = new ItemFactory(
+                Material.valueOf(config.getString("items-join.kits.material")),
                 1,
-                file.getConfig().getString("items-join.kits.display"),
-                file.getConfig().getStringList("items-join.kits.lore")
+                config.getString("items-join.kits.display"),
+                config.getStringList("items-join.kits.lore")
         );
 
         event.getPlayer().getInventory().setItem(
-                file.getConfig().getInt("items-join.kits.slot"),
-                builder.getItem()
+                config.getInt("items-join.kits.slot"),
+                itemFactory.getItem()
         );
     }
 
     @EventHandler
     public void joinPlayerTeleport(PlayerJoinEvent event) {
-        FilesLoader file = pluginCore.getFilesLoader();
 
-        if(!file.getConfig().getBoolean("join-teleport")) return;
-        if (file.getConfig().contains("spawn.world")) {
+        if(!config.getBoolean("join-teleport")) return;
+        if (config.contains("spawn.world")) {
             event.getPlayer().teleport(new Location(
-                    Bukkit.getWorld(file.getConfig().getString("spawn.world")),
-                    file.getConfig().getDouble("spawn.x"),
-                    file.getConfig().getDouble("spawn.y"),
-                    file.getConfig().getDouble("spawn.z"),
-                    (float) file.getConfig().getDouble("spawn.yaw"),
-                    (float) file.getConfig().getDouble("spawn.pirch")
+                    Bukkit.getWorld(config.getString("spawn.world")),
+                    config.getDouble("spawn.x"),
+                    config.getDouble("spawn.y"),
+                    config.getDouble("spawn.z"),
+                    (float) config.getDouble("spawn.yaw"),
+                    (float) config.getDouble("spawn.pirch")
             ));
         }
     }
