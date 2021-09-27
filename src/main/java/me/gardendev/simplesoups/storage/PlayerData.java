@@ -26,6 +26,7 @@ public class PlayerData {
         dataCache.setKills(dataStorage.getKills(uuid.toString()));
         dataCache.setDeaths(dataStorage.getDeaths(uuid.toString()));
         dataCache.setXp(dataStorage.getXp(uuid.toString()));
+        dataCache.setKdr(dataStorage.getKDR(uuid.toString()));
     }
 
     public void savePlayerData(Player player) {
@@ -46,6 +47,16 @@ public class PlayerData {
     public void incrementXp(Player player) {
         int current = this.playerData.get(player.getUniqueId()).getXp();
         this.playerData.get(player.getUniqueId()).setXp(current + 1);
+    }
+
+    public void updateKDR(Player player) {
+        int kills = this.playerData.get(player.getUniqueId()).getKills();
+        int deaths = this.playerData.get(player.getUniqueId()).getDeaths();
+        if (deaths == 0) {
+            this.playerData.get(player.getUniqueId()).setKdr((float) kills);
+            return;
+        }
+        this.playerData.get(player.getUniqueId()).setKdr((float) kills / deaths);
     }
 
     public DataCache getPlayerData(Player player) {
