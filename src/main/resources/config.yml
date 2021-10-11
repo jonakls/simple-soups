@@ -10,6 +10,7 @@ respawn-time: 5
 xp-per-kill: 5
 arrow-shot-message: true
 regeneration-soup-value: 5.0
+kit-default: 'pvp'
 scoreboard:
   enable: true
   update-ticks: 20
@@ -28,6 +29,18 @@ items-join:
     lore:
       - '&7Open menu of kits, select'
       - '&7one and go fight!'
+items:
+  permission-boolean:
+    true: '&aAllow'
+    false: '&cDeny'
+  locked-kit:
+    material: BEDROCK
+    display: '&cLocked kit &e(Right click)'
+    lore:
+      - '&7This kit is locked, if'
+      - '&7you will get this kit, please buy!'
+      - '&r'
+      - '&aPrice: &c$%value%'
 signs:
   soups: '&8[&cKitPvP&8];&cSoups'
 sounds:

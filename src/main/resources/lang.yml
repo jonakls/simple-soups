@@ -20,6 +20,7 @@ error:
   no-command: '&cYou can''t use commands in game.'
 messages:
   reload: '&7All files has been reloaded.'
+  save-data: '&aAll online player data has been saved.'
   select-kit: '&7You selected &c%kit%'
   set-spawn: '&7Spawn point correctly defined.'
   change-spawn: '&7Spawn point correctly changed.'
