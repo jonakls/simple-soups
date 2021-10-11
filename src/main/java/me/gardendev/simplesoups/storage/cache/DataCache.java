@@ -1,6 +1,9 @@
 package me.gardendev.simplesoups.storage.cache;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.StringJoiner;
 
 public class DataCache {
 
@@ -10,7 +13,7 @@ public class DataCache {
     private int deaths;
     private float kdr;
     private int xp;
-    private List<String> kits;
+    private final List<String> kits = new ArrayList<>();
 
     public void setPlayerName(String playerName) {
         this.playerName = playerName;
@@ -36,11 +39,13 @@ public class DataCache {
         this.xp = xp;
     }
 
-    /*
-    public void setKits(String kits) {
-        this.kits.removeAll(Arrays.stream(kits).toList());
+    public void setKits(String... kits) {
+        this.kits.addAll(Arrays.asList(kits));
     }
-    */
+
+    public void addKit(String kit) {
+        this.kits.add(kit);
+    }
 
     public String getPlayerName() {
         return playerName;
@@ -64,6 +69,14 @@ public class DataCache {
 
     public int getXp() {
         return xp;
+    }
+
+    public String getStringKits() {
+        StringJoiner joiner = new StringJoiner(",");
+        for (String kit : kits) {
+            joiner.add(kit);
+        }
+        return joiner.toString();
     }
 
     public List<String> getKits() {

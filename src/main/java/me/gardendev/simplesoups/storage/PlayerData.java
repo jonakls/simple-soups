@@ -27,6 +27,7 @@ public class PlayerData {
         dataCache.setDeaths(dataStorage.getDeaths(uuid.toString()));
         dataCache.setXp(dataStorage.getXp(uuid.toString()));
         dataCache.setKdr(dataStorage.getKDR(uuid.toString()));
+        dataCache.setKits(dataStorage.getKits(uuid.toString()));
     }
 
     public void savePlayerData(Player player) {
