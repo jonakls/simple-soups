@@ -1,9 +1,11 @@
 package me.gardendev.simplesoups.command;
 
 import me.gardendev.simplesoups.PluginCore;
+import me.gardendev.simplesoups.gui.KitsGUI;
 import me.gardendev.simplesoups.manager.FileManager;
 import me.gardendev.simplesoups.enums.GameStatus;
-import me.gardendev.simplesoups.utils.Colorized;
+import me.gardendev.simplesoups.storage.PlayerData;
+import me.gardendev.simplesoups.utils.ChatUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -16,6 +18,8 @@ import org.bukkit.metadata.MetadataValue;
 public class MainCommand implements CommandExecutor{
 
     private final PluginCore pluginCore;
+    private final PlayerData playerData;
+    private final KitsGUI kitsGUI;
     private final FileManager config;
     private final FileManager lang;
     private final FileManager guis;
@@ -23,6 +27,8 @@ public class MainCommand implements CommandExecutor{
 
     public MainCommand(PluginCore pluginCore){
         this.pluginCore = pluginCore;
+        this.playerData = pluginCore.getPlayerData();
+        this.kitsGUI = pluginCore.getKitsGUI();
         this.config = pluginCore.getFilesLoader().getConfig();
         this.lang = pluginCore.getFilesLoader().getLang();
         this.kits = pluginCore.getFilesLoader().getKits();
@@ -38,7 +44,7 @@ public class MainCommand implements CommandExecutor{
 
             if (!(args.length > 0)) {
 
-                Colorized.commandText(
+                ChatUtil.commandText(
                         sender,
                         prefix + "&7help commands",
                         "&c- /soup help &8| &7Show help commands",
@@ -63,7 +69,7 @@ public class MainCommand implements CommandExecutor{
         Player player = (Player) sender;
 
         if (!(args.length > 0)) {
-            Colorized.commandText(
+            ChatUtil.commandText(
                     player,
                     prefix + "&7help commands",
                     "&c- /soup help &8| &7Show help commands",
@@ -74,10 +80,29 @@ public class MainCommand implements CommandExecutor{
         }
 
         switch (args[0].toLowerCase()){
+            case "give":
+                if (!(args.length > 1)) {
+                    player.sendMessage(prefix + "Unknown args");
+                    return true;
+                }
+                switch (args[1].toLowerCase()) {
+                    case "kit":
+                        if (!(args.length > 2)) {
+                            player.sendMessage(prefix + "Unknown args");
+                            return true;
+                        }
+                        playerData.getPlayerData(player).addKit(args[2]);
+                        break;
+                    case "xp":
+                        break;
+                }
+
+                break;
             case "save":
-                pluginCore.getStorage().insert(
-                        pluginCore.getPlayerData().getPlayerData(player)
-                );
+                for (Player online : Bukkit.getOnlinePlayers()) {
+                    playerData.savePlayerData(online);
+                }
+                player.sendMessage(prefix + lang.getString("messages.save-data"));
                 break;
             case "reload":
                 lang.reload();
@@ -87,33 +112,21 @@ public class MainCommand implements CommandExecutor{
                 sender.sendMessage(prefix + lang.getString("messages.reload"));
                 break;
             case "kits":
-                player.openInventory(pluginCore.getKitsGUI().kits());
+                player.openInventory(kitsGUI.kits(player));
                 break;
-            /*
-            case "stats":
-                player.sendMessage(Colorized.apply("&aYour stats &8| &c" + player.getName()));
-                player.sendMessage(" ");
-                player.sendMessage(Colorized.apply("&cKills: &f" + pluginCore.getPlayerCache().getKills(player)));
-                player.sendMessage(Colorized.apply("&cDeaths: &f" + pluginCore.getPlayerCache().getDeaths(player)));
-                player.sendMessage(Colorized.apply("&cXp: &f" + pluginCore.getPlayerCache().getXp(player) ));
-                break;
-
-            */
             case "editmode":
-                if(player.hasMetadata("status")) {
-
-                    for (MetadataValue value : player.getMetadata("status")) {
-                        if (!value.value().equals(GameStatus.EDIT_MODE)) {
-                            player.setMetadata("status", new FixedMetadataValue(pluginCore.getPlugin(), GameStatus.EDIT_MODE));
-                            player.sendMessage(lang.getString("messages.enabled-edit-mode"));
-                            return true;
-                        }
-                        player.setMetadata("status", new FixedMetadataValue(pluginCore.getPlugin(), GameStatus.SPAWN));
-                        player.sendMessage(lang.getString("messages.disable-edit-mode"));
-                    }
-                    return true;
+                if(!player.hasMetadata("status")) {
+                    return false;
                 }
-
+                for (MetadataValue value : player.getMetadata("status")) {
+                    if (!value.value().equals(GameStatus.EDIT_MODE)) {
+                        player.setMetadata("status", new FixedMetadataValue(pluginCore.getPlugin(), GameStatus.EDIT_MODE));
+                        player.sendMessage(lang.getString("messages.enabled-edit-mode"));
+                        return true;
+                    }
+                    player.setMetadata("status", new FixedMetadataValue(pluginCore.getPlugin(), GameStatus.SPAWN));
+                    player.sendMessage(lang.getString("messages.disable-edit-mode"));
+                }
                 break;
             case "setspawn":
                 if (!(config.contains("spawn.world"))) {
