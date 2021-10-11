@@ -6,9 +6,10 @@ commands:
   soup:
     aliases:
       - soupvp
+      - pvp
+      - spvp
     description: General command
   kits:
     aliases:
       - kit
-      - pvp
     description: Kit command
