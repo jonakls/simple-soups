@@ -3,7 +3,7 @@ package me.gardendev.simplesoups.utils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-public class Colorized {
+public class ChatUtil {
 
     public static String apply(String path) {
         return ChatColor.translateAlternateColorCodes('&', path);
