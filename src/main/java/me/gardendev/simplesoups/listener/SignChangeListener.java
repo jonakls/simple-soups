@@ -1,9 +1,8 @@
 package me.gardendev.simplesoups.listener;
 
 import me.gardendev.simplesoups.PluginCore;
-import me.gardendev.simplesoups.loader.FilesLoader;
 import me.gardendev.simplesoups.manager.FileManager;
-import me.gardendev.simplesoups.utils.Colorized;
+import me.gardendev.simplesoups.utils.ChatUtil;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -30,7 +29,7 @@ public class SignChangeListener implements Listener {
 
                 event.setLine(
                         i,
-                        Colorized.apply(lines[i])
+                        ChatUtil.apply(lines[i])
                 );
 
             }

@@ -3,7 +3,7 @@ package me.gardendev.simplesoups.listener;
 import me.gardendev.simplesoups.manager.FileManager;
 import me.gardendev.simplesoups.PluginCore;
 import me.gardendev.simplesoups.loader.FilesLoader;
-import me.gardendev.simplesoups.utils.Colorized;
+import me.gardendev.simplesoups.utils.ChatUtil;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -60,7 +60,7 @@ public class PlayerInteractListener implements Listener {
 
         String[] lines = files.getConfig().getString("signs.soups").split(";");
 
-        if (Colorized.apply(sign.getLine(1)).equals(Colorized.apply(lines[1]))) {
+        if (ChatUtil.apply(sign.getLine(1)).equals(ChatUtil.apply(lines[1]))) {
 
             event.getPlayer().openInventory(pluginCore.getKitsGUI().refill());
         }
@@ -75,7 +75,7 @@ public class PlayerInteractListener implements Listener {
         if (!event.getItem().getItemMeta().getDisplayName().equals(config.getString("items-join.kits.display"))) return;
 
         event.getPlayer().closeInventory();
-        event.getPlayer().openInventory(pluginCore.getKitsGUI().kits());
+        event.getPlayer().openInventory(pluginCore.getKitsGUI().kits(event.getPlayer()));
 
     }
 
