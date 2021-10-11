@@ -2,7 +2,6 @@ package me.gardendev.simplesoups.listener;
 
 import me.gardendev.simplesoups.PluginCore;
 import me.gardendev.simplesoups.manager.FileManager;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -13,16 +12,17 @@ import org.bukkit.projectiles.ProjectileSource;
 
 public class ArrowDamageListener implements Listener {
 
-    private FileManager config;
-    private FileManager lang;
+    private final FileManager config;
+    private final FileManager lang;
 
     public ArrowDamageListener(PluginCore pluginCore) {
         this.config = pluginCore.getFilesLoader().getConfig();
-        this.config = pluginCore.getFilesLoader().getLang();
+        this.lang = pluginCore.getFilesLoader().getLang();
     }
 
     @EventHandler
     private void arrowNotify(EntityDamageByEntityEvent event) {
+        String prefix = lang.getString("prefix");
         if (!config.getBoolean("arrow-shot-message")) return;
         if (!(event.getEntity() instanceof Player)) return;
         if (!(event.getDamager().getType().equals(EntityType.ARROW))) return;
@@ -34,15 +34,10 @@ public class ArrowDamageListener implements Listener {
         if(!(source instanceof Player)) return;
         Player damager = (Player) source;
 
-        Bukkit.broadcastMessage("1");
-        Bukkit.broadcastMessage("Cause" + event.getCause());
-        Bukkit.broadcastMessage("Cause name" + event.getCause().name());
-        Bukkit.broadcastMessage("2");
-        damager.sendMessage(
+        damager.sendMessage(prefix +
                 lang.getString("messages.arrow-message")
                         .replace("%player%", player.getName())
                         .replace("%value%", String.valueOf(player.getHealth()))
         );
-        Bukkit.broadcastMessage("3");
     }
 }
