@@ -1,6 +1,6 @@
 # SimpleSoups
 
-[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=xGardenDev&repo=SimpleSoups&theme=tokyonight)](https://github.com/xGardenDev/SimpleSoups)
+[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=Jonakls&repo=SimpleSoups&theme=tokyonight)](https://github.com/Jonakls/SimpleSoups)
 
 Basic and simple mini pvp game, consists of regeneration with soups.
 
