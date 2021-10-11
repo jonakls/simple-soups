@@ -1,6 +1,8 @@
 package me.gardendev.simplesoups.storage;
 
 import me.gardendev.simplesoups.PluginCore;
+import me.gardendev.simplesoups.SimpleSoups;
+import me.gardendev.simplesoups.manager.FileManager;
 import me.gardendev.simplesoups.storage.cache.DataCache;
 import me.gardendev.simplesoups.storage.database.IConnection;
 
@@ -12,12 +14,14 @@ import java.sql.SQLException;
 public class DataStorage {
 
     private final IConnection connection;
-    private final PluginCore pluginCore;
+    private final SimpleSoups plugin;
     private final String table;
+    private final FileManager config;
 
     public DataStorage(IConnection connection, PluginCore pluginCore) {
-        this.pluginCore = pluginCore;
-        this.table = pluginCore.getFilesLoader().getConfig().getString("database.table");
+        this.plugin = pluginCore.getPlugin();
+        this.config = pluginCore.getFilesLoader().getConfig();
+        this.table = this.config.getString("database.table");
         this.connection = connection;
         this.initialize();
     }
@@ -25,14 +29,21 @@ public class DataStorage {
     final static String SELECT = "SELECT * FROM $table$ WHERE id = '$id$'";
 
     private void initialize() {
-
-        String sql = "CREATE TABLE IF NOT EXISTS $table$ (id VARCHAR(36) PRIMARY KEY, name VARCHAR(60), kills INTEGER, deaths INTEGER, xp INTEGER, kdr DECIMAL)"
-                .replace("$table$", table);
+        StringBuilder sql = new StringBuilder();
+        sql.append("CREATE TABLE IF NOT EXISTS ")
+                .append(table)
+                .append("(id VARCHAR(36) PRIMARY KEY,")
+                .append("name VARCHAR(60),")
+                .append("kills INTEGER,")
+                .append("deaths INTEGER,")
+                .append("xp INTEGER,")
+                .append("kdr DECIMAL,")
+                .append("kits VARCHAR (200))");
 
         try (Connection con = connection.getConnection()) {
-            PreparedStatement statement = con.prepareStatement(sql);
+            PreparedStatement statement = con.prepareStatement(sql.toString());
             statement.execute();
-            pluginCore.getPlugin().getLogger().info("Loading database success!");
+            plugin.getLogger().info("Loading database success!");
 
         }catch (SQLException e){
             e.printStackTrace();
@@ -41,7 +52,7 @@ public class DataStorage {
 
     public void insert(DataCache cache) {
 
-        String sqlInsert = "REPLACE INTO $table$ (id, name, kills, deaths, xp, kdr) VALUES (?, ?, ?, ?, ?, ?)"
+        String sqlInsert = "REPLACE INTO $table$ (id, name, kills, deaths, xp, kdr, kits) VALUES (?, ?, ?, ?, ?, ?, ?)"
                 .replace("$table$", table);
 
         try (Connection con = connection.getConnection()) {
@@ -52,6 +63,7 @@ public class DataStorage {
             statement.setInt(4, cache.getDeaths());
             statement.setInt(5, cache.getXp());
             statement.setFloat(6, cache.getKdr());
+            statement.setString(7, cache.getStringKits());
 
             statement.execute();
 
@@ -135,5 +147,25 @@ public class DataStorage {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    public String[] getKits(String id) {
+        String[] def = {config.getString("kit-default")};
+        try (Connection con = connection.getConnection()) {
+            PreparedStatement statement = con.prepareStatement(
+                    SELECT.replace("$table$", table).replace("$id$", id)
+            );
+
+            ResultSet result = statement.executeQuery();
+
+            while (result.next()) {
+                if(result.getString("id").equalsIgnoreCase(id.toLowerCase())) {
+                    return result.getString("kits").split(",");
+                }
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return def;
     }
 }
