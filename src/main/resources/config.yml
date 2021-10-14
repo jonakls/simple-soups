@@ -16,11 +16,12 @@ scoreboard:
   update-ticks: 20
 database:
   enable: false
+  user: 'root'
+  host: 'localhost'
+  port: 3306
+  password: 'mypassword'
   database-name: 'database'
   table: 'simplesoups'
-  user: 'root'
-  ip: 'localhost'
-  password: 'mypassword'
 items-join:
   kits:
     material: CHEST
