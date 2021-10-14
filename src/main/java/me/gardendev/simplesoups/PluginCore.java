@@ -8,6 +8,7 @@ import me.gardendev.simplesoups.api.Loader;
 import me.gardendev.simplesoups.scoreboard.GameScoreboard;
 import me.gardendev.simplesoups.storage.DataStorage;
 import me.gardendev.simplesoups.storage.database.IConnection;
+import me.gardendev.simplesoups.storage.database.types.mysql.MySQLConnection;
 import me.gardendev.simplesoups.storage.database.types.sqlite.SQLConnection;
 
 public class PluginCore implements Core{
@@ -47,7 +48,11 @@ public class PluginCore implements Core{
 
     private void database() {
         this.getPlugin().getLogger().info("Loading database...");
-        this.connection = new SQLConnection(this);
+        if (this.filesLoader.getConfig().getBoolean("database.enable")) {
+            this.connection = new MySQLConnection(this);
+        }else {
+            this.connection = new SQLConnection(this);
+        }
         this.connection.load();
         this.storage = new DataStorage(this.connection, this);
     }
