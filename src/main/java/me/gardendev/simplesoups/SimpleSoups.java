@@ -16,7 +16,6 @@ public final class SimpleSoups extends JavaPlugin {
     public void onDisable() {
         getLogger().info("Closing SoupLab v" + getDescription().getVersion());
         getLogger().info("Saving player data...");
-        //this.core.getPlayerData();
         this.core.closeDatabase();
         getLogger().info("Closed connection, finally!");
     }
