@@ -1,6 +1,8 @@
 package me.gardendev.simplesoups.storage.database.types.sqlite;
 
 import me.gardendev.simplesoups.PluginCore;
+import me.gardendev.simplesoups.SimpleSoups;
+import me.gardendev.simplesoups.manager.FileManager;
 import me.gardendev.simplesoups.storage.database.IConnection;
 
 import java.io.File;
@@ -11,14 +13,19 @@ import java.sql.SQLException;
 
 public class SQLConnection implements IConnection {
 
-    private final File file;
+    private File file;
     private Connection connection;
+    private final FileManager config;
+    private final SimpleSoups plugin;
 
     public SQLConnection(PluginCore core) {
+        this.plugin = core.getPlugin();
+        this.config = core.getFilesLoader().getConfig();
+        this.create();
+    }
 
-        this.file = new File(core.getPlugin().getDataFolder(),
-                core.getFilesLoader().getConfig().getString("database.database-name") + ".db");
-
+    private void create() {
+        this.file = new File(plugin.getDataFolder(), config.getString("database.database-name") + ".db");
         if (!this.file.exists()) {
             try {
                 this.file.createNewFile();
@@ -31,7 +38,6 @@ public class SQLConnection implements IConnection {
     @Override
     public void load() {
         try {
-
             Class.forName("org.sqlite.JDBC");
         }catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -41,7 +47,6 @@ public class SQLConnection implements IConnection {
 
     @Override
     public Connection getConnection() throws SQLException {
-
         try {
             if(connection == null || connection.isClosed()) {
                 connection = DriverManager.getConnection("jdbc:sqlite:" + file);
@@ -57,7 +62,6 @@ public class SQLConnection implements IConnection {
 
     @Override
     public void close() {
-
         try {
             if(connection != null && !connection.isClosed()) {
                 connection.close();
