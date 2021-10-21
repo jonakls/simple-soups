@@ -10,6 +10,8 @@ import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -76,8 +78,8 @@ public class FileManager extends YamlConfiguration {
         String text = super.getString(path);
 
         if (text == null){
-            plugin.getLogger().info("Error: Path is null: " + path);
-            return "Error 404 - The path is null: " + path;
+            plugin.getLogger().warning("Error: Found path in your " + this.fileName + " file is null: " + path);
+            return "[Error 404]: This path is null: " + path;
         }
 
         return ChatColor.translateAlternateColorCodes('&', text);
@@ -86,6 +88,11 @@ public class FileManager extends YamlConfiguration {
     @Override
     public List<String> getStringList(String path) {
         List<String> list = super.getStringList(path);
+        if (list == null){
+            plugin.getLogger().warning("Error: Found path in your " + this.fileName + " file is null: " + path);
+            return List.of("[Error 404]: This path is null: " + path);
+        }
+
         list.replaceAll(line -> ChatColor.translateAlternateColorCodes('&', line));
         return list;
     }
