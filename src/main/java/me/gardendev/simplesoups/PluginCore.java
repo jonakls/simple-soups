@@ -1,6 +1,6 @@
 package me.gardendev.simplesoups;
 
-import me.gardendev.simplesoups.gui.KitsGUI;
+import me.gardendev.simplesoups.gui.Inventories;
 import me.gardendev.simplesoups.loader.*;
 import me.gardendev.simplesoups.storage.PlayerData;
 import me.gardendev.simplesoups.api.Core;
@@ -19,7 +19,7 @@ public class PluginCore implements Core{
     private ManagerLoader managerLoader;
     private HandlersLoader handlersLoader;
 
-    private KitsGUI kitsGUI;
+    private Inventories inventories;
     private PlayerData playerData;
     private IConnection connection;
     private DataStorage storage;
@@ -41,7 +41,7 @@ public class PluginCore implements Core{
                 new CommandsLoader(this),
                 new ListenersLoader(this)
         );
-        kitsGUI = new KitsGUI(this);
+        inventories = new Inventories(this);
         gameScoreboard = new GameScoreboard(this);
         gameScoreboard.runTaskUpdate();
     }
@@ -79,8 +79,8 @@ public class PluginCore implements Core{
         return managerLoader;
     }
 
-    public KitsGUI getKitsGUI() {
-        return kitsGUI;
+    public Inventories getInventories() {
+        return inventories;
     }
 
     public PlayerData getPlayerData() {
