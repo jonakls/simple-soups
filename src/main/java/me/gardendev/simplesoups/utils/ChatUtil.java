@@ -5,13 +5,13 @@ import org.bukkit.command.CommandSender;
 
 public class ChatUtil {
 
-    public static String apply(String path) {
+    public static String toLegacyColors(String path) {
         return ChatColor.translateAlternateColorCodes('&', path);
     }
 
-    public static void commandText(CommandSender sender, String...strings) {
+    public static void sendArrayMessages(CommandSender sender, String...strings) {
         for(String string : strings) {
-            sender.sendMessage(apply(string));
+            sender.sendMessage(toLegacyColors(string));
         }
     }
 
