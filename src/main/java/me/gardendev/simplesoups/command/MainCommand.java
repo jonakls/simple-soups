@@ -1,7 +1,7 @@
 package me.gardendev.simplesoups.command;
 
 import me.gardendev.simplesoups.PluginCore;
-import me.gardendev.simplesoups.gui.KitsGUI;
+import me.gardendev.simplesoups.gui.Inventories;
 import me.gardendev.simplesoups.manager.FileManager;
 import me.gardendev.simplesoups.enums.GameStatus;
 import me.gardendev.simplesoups.storage.PlayerData;
@@ -19,7 +19,7 @@ public class MainCommand implements CommandExecutor{
 
     private final PluginCore pluginCore;
     private final PlayerData playerData;
-    private final KitsGUI kitsGUI;
+    private final Inventories inventories;
     private final FileManager config;
     private final FileManager lang;
     private final FileManager guis;
@@ -28,7 +28,7 @@ public class MainCommand implements CommandExecutor{
     public MainCommand(PluginCore pluginCore){
         this.pluginCore = pluginCore;
         this.playerData = pluginCore.getPlayerData();
-        this.kitsGUI = pluginCore.getKitsGUI();
+        this.inventories = pluginCore.getInventories();
         this.config = pluginCore.getFilesLoader().getConfig();
         this.lang = pluginCore.getFilesLoader().getLang();
         this.kits = pluginCore.getFilesLoader().getKits();
@@ -44,7 +44,7 @@ public class MainCommand implements CommandExecutor{
 
             if (!(args.length > 0)) {
 
-                ChatUtil.commandText(
+                ChatUtil.sendArrayMessages(
                         sender,
                         prefix + "&7help commands",
                         "&c- /soup help &8| &7Show help commands",
@@ -69,7 +69,7 @@ public class MainCommand implements CommandExecutor{
         Player player = (Player) sender;
 
         if (!(args.length > 0)) {
-            ChatUtil.commandText(
+            ChatUtil.sendArrayMessages(
                     player,
                     prefix + "&7help commands",
                     "&c- /soup help &8| &7Show help commands",
@@ -82,13 +82,13 @@ public class MainCommand implements CommandExecutor{
         switch (args[0].toLowerCase()){
             case "give":
                 if (!(args.length > 1)) {
-                    player.sendMessage(prefix + "Unknown args");
+                    sender.sendMessage(prefix + lang.getString("error.unknown-command"));
                     return true;
                 }
                 switch (args[1].toLowerCase()) {
                     case "kit":
                         if (!(args.length > 2)) {
-                            player.sendMessage(prefix + "Unknown args");
+                            sender.sendMessage(prefix + lang.getString("error.unknown-command"));
                             return true;
                         }
                         playerData.getPlayerData(player).addKit(args[2]);
@@ -112,7 +112,7 @@ public class MainCommand implements CommandExecutor{
                 sender.sendMessage(prefix + lang.getString("messages.reload"));
                 break;
             case "kits":
-                player.openInventory(kitsGUI.kits(player));
+                player.openInventory(inventories.openKits(player));
                 break;
             case "editmode":
                 if(!player.hasMetadata("status")) {

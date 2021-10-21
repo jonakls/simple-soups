@@ -60,9 +60,9 @@ public class PlayerInteractListener implements Listener {
 
         String[] lines = files.getConfig().getString("signs.soups").split(";");
 
-        if (ChatUtil.apply(sign.getLine(1)).equals(ChatUtil.apply(lines[1]))) {
+        if (ChatUtil.toLegacyColors(sign.getLine(1)).equals(ChatUtil.toLegacyColors(lines[1]))) {
 
-            event.getPlayer().openInventory(pluginCore.getKitsGUI().refill());
+            event.getPlayer().openInventory(pluginCore.getInventories().openRefill());
         }
     }
 
@@ -75,7 +75,7 @@ public class PlayerInteractListener implements Listener {
         if (!event.getItem().getItemMeta().getDisplayName().equals(config.getString("items-join.kits.display"))) return;
 
         event.getPlayer().closeInventory();
-        event.getPlayer().openInventory(pluginCore.getKitsGUI().kits(event.getPlayer()));
+        event.getPlayer().openInventory(pluginCore.getInventories().openKits(event.getPlayer()));
 
     }
 

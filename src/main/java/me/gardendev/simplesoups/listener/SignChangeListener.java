@@ -29,7 +29,7 @@ public class SignChangeListener implements Listener {
 
                 event.setLine(
                         i,
-                        ChatUtil.apply(lines[i])
+                        ChatUtil.toLegacyColors(lines[i])
                 );
 
             }
