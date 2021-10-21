@@ -8,8 +8,6 @@ commands:
       - soupvp
       - pvp
       - spvp
-    description: General command
-  kits:
-    aliases:
       - kit
-    description: Kit command
+      - kits
+    description: General command
