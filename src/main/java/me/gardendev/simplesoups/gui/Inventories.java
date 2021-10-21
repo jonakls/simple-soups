@@ -11,21 +11,21 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-public class KitsGUI {
+public class Inventories {
 
     private final FileManager kits;
     private final FileManager guis;
     private final FileManager config;
     private final PlayerData playerData;
 
-    public KitsGUI(PluginCore pluginCore) {
+    public Inventories(PluginCore pluginCore) {
         this.kits = pluginCore.getFilesLoader().getKits();
         this.guis = pluginCore.getFilesLoader().getGui();
         this.config = pluginCore.getFilesLoader().getConfig();
         this.playerData = pluginCore.getPlayerData();
     }
 
-    public Inventory kits(Player player) {
+    public Inventory openKits(Player player) {
         DataCache cache = playerData.getPlayerData(player);
 
         Inventory inventory = Bukkit.createInventory(
@@ -36,7 +36,7 @@ public class KitsGUI {
 
         for (String path : kits.getConfigurationSection("kits").getKeys(false)) {
 
-            if (!cache.getKits().contains(path)) {
+            if (!cache.getKits().contains(path) && player.hasPermission("simplesoups.kit." + path)) {
                 inventory.setItem(
                         kits.getInt("kits." + path + ".icon.slot-menu"),
                         this.lockKit()
@@ -59,7 +59,7 @@ public class KitsGUI {
         return inventory;
     }
 
-    public Inventory refill() {
+    public Inventory openRefill() {
         Inventory inventory = Bukkit.createInventory(
                 null,
                 36,
