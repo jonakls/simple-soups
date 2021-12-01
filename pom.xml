@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>me.gardendev</groupId>
+    <groupId>me.jonakls</groupId>
     <artifactId>SimpleSoups</artifactId>
     <version>1.0-b7</version>
     <packaging>jar</packaging>
@@ -55,7 +55,7 @@
                     <relocations>
                         <relocation>
                             <pattern>fr.mrmicky.fastboard</pattern>
-                            <shadedPattern>me.gardendev.fastboard</shadedPattern>
+                            <shadedPattern>me.jonakls.fastboard</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>

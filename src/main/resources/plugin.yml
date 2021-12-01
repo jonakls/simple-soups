@@ -1,6 +1,6 @@
 name: SimpleSoups
 version: ${project.version}
-main: me.gardendev.simplesoups.SimpleSoups
+main: me.jonakls.simplesoups.SimpleSoups
 authors: [ Jonakls ]
 commands:
   soup:
