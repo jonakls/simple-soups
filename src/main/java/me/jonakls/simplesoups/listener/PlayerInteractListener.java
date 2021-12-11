@@ -1,7 +1,6 @@
 package me.jonakls.simplesoups.listener;
 
 import me.jonakls.simplesoups.PluginCore;
-import me.jonakls.simplesoups.loader.FilesLoader;
 import me.jonakls.simplesoups.manager.FileManager;
 import me.jonakls.simplesoups.utils.ChatUtil;
 import org.bukkit.Material;
@@ -15,18 +14,25 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class PlayerInteractListener implements Listener {
 
+    private final FileManager config;
     private final PluginCore pluginCore;
 
     public PlayerInteractListener(PluginCore pluginCore) {
         this.pluginCore = pluginCore;
+        this.config = pluginCore.getFilesLoader().getConfig();
     }
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
-        FileManager config = pluginCore.getFilesLoader().getConfig();
-        if (!event.getAction().equals(Action.RIGHT_CLICK_AIR) && !event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) return;
-        if (event.getItem() == null) return;
-        if (!event.getItem().getType().equals(Material.MUSHROOM_SOUP)) return;
+        if (!event.getAction().equals(Action.RIGHT_CLICK_AIR) && !event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+            return;
+        }
+        if (event.getItem() == null) {
+            return;
+        }
+        if (!event.getItem().getType().equals(Material.MUSHROOM_SOUP)) {
+            return;
+        }
 
         event.setCancelled(true);
         event.setUseItemInHand(Event.Result.DENY);
@@ -51,14 +57,13 @@ public class PlayerInteractListener implements Listener {
 
     @EventHandler
     public void onInteractSign(PlayerInteractEvent event) {
-        FilesLoader files = pluginCore.getFilesLoader();
         if (event.getClickedBlock() == null) return;
         if (!event.getAction().equals(Action.RIGHT_CLICK_AIR) && !event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) return;
         if (!event.getClickedBlock().getType().equals(Material.WALL_SIGN)) return;
 
         Sign sign = (Sign) event.getClickedBlock().getState();
 
-        String[] lines = files.getConfig().getString("signs.soups").split(";");
+        String[] lines = config.getString("signs.soups").split(";");
 
         if (ChatUtil.toLegacyColors(sign.getLine(1)).equals(ChatUtil.toLegacyColors(lines[1]))) {
 
@@ -67,9 +72,7 @@ public class PlayerInteractListener implements Listener {
     }
 
     @EventHandler
-    public void onInteractHotbar(PlayerInteractEvent event) {
-        FileManager config = pluginCore.getFilesLoader().getConfig();
-
+    public void onInteractHotBar(PlayerInteractEvent event) {
         if (event.getItem() == null) return;
         if (!event.getItem().hasItemMeta()) return;
         if (!event.getItem().getItemMeta().getDisplayName().equals(config.getString("items-join.kits.display"))) return;

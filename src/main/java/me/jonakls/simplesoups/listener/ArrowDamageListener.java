@@ -37,7 +37,7 @@ public class ArrowDamageListener implements Listener {
         damager.sendMessage(prefix +
                 lang.getString("messages.arrow-message")
                         .replace("%player%", player.getName())
-                        .replace("%value%", String.valueOf(player.getHealth()))
+                        .replace("%value%", String.valueOf(Math.round(player.getHealth())))
         );
     }
 }

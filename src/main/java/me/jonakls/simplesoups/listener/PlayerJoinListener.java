@@ -1,8 +1,10 @@
 package me.jonakls.simplesoups.listener;
 
 import me.jonakls.simplesoups.PluginCore;
+import me.jonakls.simplesoups.SimpleSoups;
 import me.jonakls.simplesoups.enums.GameStatus;
 import me.jonakls.simplesoups.manager.FileManager;
+import me.jonakls.simplesoups.storage.PlayerData;
 import me.jonakls.simplesoups.utils.ItemFactory;
 import me.jonakls.simplesoups.utils.PlayerUtils;
 import org.bukkit.Bukkit;
@@ -18,16 +20,20 @@ public class PlayerJoinListener implements Listener {
 
     private final PluginCore pluginCore;
     private final FileManager config;
+    private final SimpleSoups plugin;
+    private final PlayerData playerData;
 
     public PlayerJoinListener(PluginCore pluginCore) {
         this.pluginCore = pluginCore;
+        this.playerData = pluginCore.getPlayerData();
+        this.plugin = pluginCore.getPlugin();
         this.config = pluginCore.getFilesLoader().getConfig();
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void loadPlayerData(PlayerJoinEvent event) {
-        pluginCore.getPlugin().getLogger().info("Load data of " + event.getPlayer().getName());
-        pluginCore.getPlayerData().loadPlayerData(event.getPlayer());
+        plugin.getLogger().info("Load data of " + event.getPlayer().getName());
+        playerData.loadPlayerData(event.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -72,8 +78,4 @@ public class PlayerJoinListener implements Listener {
             ));
         }
     }
-
-
-
-
 }

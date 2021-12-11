@@ -4,6 +4,10 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '7.1.0'
 }
 
+group = 'me.jonakls'
+version = '1.0'
+description = 'SimpleSoups'
+
 repositories {
     mavenLocal()
     maven {
@@ -30,10 +34,7 @@ dependencies {
     compileOnly 'com.github.MilkBowl:VaultAPI:1.7'
 }
 
-group = 'me.jonakls'
-version = '1.0-b7'
-description = 'SimpleSoups'
-java.sourceCompatibility = JavaVersion.VERSION_11
+java.sourceCompatibility = JavaVersion.VERSION_1_8
 
 publishing {
     publications {
@@ -45,4 +46,10 @@ publishing {
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
+}
+
+tasks {
+    shadowJar {
+        relocate "fr.mrmicky.fastboard", "me.jonakls.lib.fastboard"
+    }
 }

@@ -54,7 +54,7 @@ public class PluginCore implements Core {
         this.getPlugin().getLogger().info("Loading database...");
         if (this.filesLoader.getConfig().getBoolean("database.enable")) {
             this.connection = new MySQLConnection(this);
-        }else {
+        } else {
             this.connection = new SQLConnection(this);
         }
         this.connection.load();

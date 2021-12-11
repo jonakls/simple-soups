@@ -64,7 +64,7 @@ public class DataCache {
     }
 
     public float getKdr() {
-        return kdr;
+        return Math.round(kdr);
     }
 
     public int getXp() {
