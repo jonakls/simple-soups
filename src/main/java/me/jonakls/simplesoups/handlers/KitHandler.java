@@ -2,7 +2,7 @@ package me.jonakls.simplesoups.handlers;
 
 import me.jonakls.simplesoups.PluginCore;
 import me.jonakls.simplesoups.enums.GameStatus;
-import me.jonakls.simplesoups.loader.FilesLoader;
+import me.jonakls.simplesoups.manager.FileManager;
 import me.jonakls.simplesoups.utils.ItemFactory;
 import me.jonakls.simplesoups.utils.TitleFactory;
 import org.bukkit.entity.Player;
@@ -15,81 +15,76 @@ import java.util.List;
 public class KitHandler {
 
     private final PluginCore pluginCore;
+    private final FileManager lang;
+    private final FileManager kits;
 
     public KitHandler(PluginCore pluginCore) {
         this.pluginCore = pluginCore;
+        this.lang = pluginCore.getFilesLoader().getLang();
+        this.kits = pluginCore.getFilesLoader().getKits();
     }
 
     public void setPlayerKit(Player player, String kitName) {
-        FilesLoader file = pluginCore.getFilesLoader();
-        String prefix = file.getLang().getString("prefix");
+        String prefix = lang.getString("prefix");
         if (!player.hasMetadata("status")) return;
-        for (MetadataValue meta : player.getMetadata("status")) {
 
-            if (!meta.value().equals(GameStatus.SPAWN)) {
-                player.sendMessage(prefix + file.getLang().getString("error.already-kit"));
-                return;
-            }
+        MetadataValue meta = player.getMetadata("status").get(0);
+        if (!meta.value().equals(GameStatus.SPAWN)) {
+            player.sendMessage(prefix + lang.getString("error.already-kit"));
+            return;
+        }
 
-            PlayerInventory inventory = player.getInventory();
+        PlayerInventory inventory = player.getInventory();
 
-            inventory.clear();
-            inventory.setHelmet(null);
-            inventory.setChestplate(null);
-            inventory.setLeggings(null);
-            inventory.setBoots(null);
+        inventory.clear();
+        inventory.setHelmet(null);
+        inventory.setChestplate(null);
+        inventory.setLeggings(null);
+        inventory.setBoots(null);
 
-            TitleFactory builder = new TitleFactory(
-                    file.getLang().getString("titles.select-kit.title").replace("%kit%", kitName),
-                    file.getLang().getString("titles.select-kit.sub-title").replace("%kit%", kitName)
-            );
+        TitleFactory titleFactory = new TitleFactory(
+                lang.getString("titles.select-kit.title").replace("%kit%", kitName),
+                lang.getString("titles.select-kit.sub-title").replace("%kit%", kitName)
+        );
 
-            builder.setTime(
-                    file.getLang().getInt("titles.select-kit.fade-in"),
-                    file.getLang().getInt("titles.select-kit.stay"),
-                    file.getLang().getInt("titles.select-kit.fade-out")
-            );
+        titleFactory.setTime(
+                lang.getInt("titles.select-kit.fade-in"),
+                lang.getInt("titles.select-kit.stay"),
+                lang.getInt("titles.select-kit.fade-out")
+        );
 
-            builder.send(player);
+        titleFactory.send(player);
 
-            player.sendMessage(prefix + file.getLang().getString("messages.select-kit").replace("%kit%", kitName));
+        player.sendMessage(prefix + lang.getString("messages.select-kit").replace("%kit%", kitName));
 
-            player.setMetadata("status", new FixedMetadataValue(pluginCore.getPlugin(), GameStatus.IN_GAME));
+        player.setMetadata("status", new FixedMetadataValue(pluginCore.getPlugin(), GameStatus.IN_GAME));
 
-            for (String path : file.getKits().getConfigurationSection("kits").getKeys(false)) {
+        for (String path : kits.getConfigurationSection("kits").getKeys(false)) {
+            pluginCore.getPlugin().getLogger().info("Test: ${date:YYYY}");
 
-                if (path.toLowerCase().equals(kitName)) {
+            if (path.toLowerCase().equals(kitName)) {
 
-                    ItemFactory helmet = new ItemFactory(file.getKits().getString("kits." + path + ".armor.head").split(";"));
-                    ItemFactory body = new ItemFactory(file.getKits().getString("kits." + path + ".armor.body").split(";"));
-                    ItemFactory leggins = new ItemFactory(file.getKits().getString("kits." + path + ".armor.leggins").split(";"));
-                    ItemFactory boats = new ItemFactory(file.getKits().getString("kits." + path + ".armor.boats").split(";"));
+                ItemFactory helmet = new ItemFactory(kits.getString("kits." + path + ".armor.head").split(";"));
+                ItemFactory body = new ItemFactory(kits.getString("kits." + path + ".armor.body").split(";"));
+                ItemFactory leggins = new ItemFactory(kits.getString("kits." + path + ".armor.leggins").split(";"));
+                ItemFactory boats = new ItemFactory(kits.getString("kits." + path + ".armor.boats").split(";"));
 
-                    inventory.setHelmet(helmet.getItem());
+                inventory.setHelmet(helmet.getItem());
+                inventory.setChestplate(body.getItem());
+                inventory.setLeggings(leggins.getItem());
+                inventory.setBoots(boats.getItem());
 
-                    inventory.setChestplate(body.getItem());
+                List<String> items = kits.getStringList("kits." + path + ".items");
 
-                    inventory.setLeggings(leggins.getItem());
-
-                    inventory.setBoots(boats.getItem());
-
-                    List<String> items = file.getKits().getStringList("kits." + path + ".items");
-
-                    for (int i = 0 ; i < items.size() ; i++) {
-
-                        String[] strings = items.get(i).split(";");
-
-                        ItemFactory itemBuilder = new ItemFactory(strings);
-
-                        inventory.setItem(i, itemBuilder.getItem());
-
-                    }
+                for (int i = 0; i < items.size(); i++) {
+                    String[] strings = items.get(i).split(";");
+                    ItemFactory itemFactory = new ItemFactory(strings);
+                    inventory.setItem(i, itemFactory.getItem());
                 }
-
             }
+
         }
     }
-
 
 
 }
