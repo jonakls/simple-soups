@@ -15,20 +15,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 
-public class MainCommand implements CommandExecutor{
+public class MainCommand implements CommandExecutor {
 
     private final PluginCore pluginCore;
     private final PlayerData playerData;
-    private final Inventories inventories;
     private final FileManager config;
     private final FileManager lang;
     private final FileManager guis;
     private final FileManager kits;
 
-    public MainCommand(PluginCore pluginCore){
+    public MainCommand(PluginCore pluginCore) {
         this.pluginCore = pluginCore;
         this.playerData = pluginCore.getPlayerData();
-        this.inventories = pluginCore.getInventories();
         this.config = pluginCore.getFilesLoader().getConfig();
         this.lang = pluginCore.getFilesLoader().getLang();
         this.kits = pluginCore.getFilesLoader().getKits();
@@ -37,7 +35,7 @@ public class MainCommand implements CommandExecutor{
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-
+        Inventories inventories = pluginCore.getInventories();
         String prefix = lang.getString("prefix");
 
         if (!(sender instanceof Player)) {
@@ -79,7 +77,7 @@ public class MainCommand implements CommandExecutor{
             return false;
         }
 
-        switch (args[0].toLowerCase()){
+        switch (args[0].toLowerCase()) {
             case "give":
                 if (!(args.length > 1)) {
                     sender.sendMessage(prefix + lang.getString("error.unknown-command"));
@@ -115,7 +113,7 @@ public class MainCommand implements CommandExecutor{
                 player.openInventory(inventories.openKits(player));
                 break;
             case "editmode":
-                if(!player.hasMetadata("status")) {
+                if (!player.hasMetadata("status")) {
                     return false;
                 }
                 for (MetadataValue value : player.getMetadata("status")) {
