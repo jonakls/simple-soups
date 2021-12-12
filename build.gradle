@@ -48,8 +48,15 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
-tasks {
-    shadowJar {
-        relocate "fr.mrmicky.fastboard", "me.jonakls.lib.fastboard"
+processResources {
+    def props = [version: version]
+    inputs.properties props
+    filteringCharset 'UTF-8'
+    filesMatching('plugin.yml') {
+        expand props
     }
+}
+
+shadowJar {
+    relocate "fr.mrmicky.fastboard", "me.jonakls.lib.fastboard"
 }

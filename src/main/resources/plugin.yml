@@ -1,5 +1,5 @@
 name: SimpleSoups
-version: ${project.version}
+version: ${version}
 main: me.jonakls.simplesoups.SimpleSoups
 authors: [ Jonakls ]
 commands:
