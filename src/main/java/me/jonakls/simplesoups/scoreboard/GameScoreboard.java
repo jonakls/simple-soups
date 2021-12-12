@@ -58,7 +58,7 @@ public class GameScoreboard {
             for (FastBoard board : getBoards().values()) {
                 this.update(board);
             }
-        },0, config.getLong("scoreboard.update-ticks"));
+        }, 0, config.getLong("scoreboard.update-ticks"));
     }
 
     public void delete(Player player) {

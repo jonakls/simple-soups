@@ -42,7 +42,7 @@ public class PlayerInteractListener implements Listener {
 
         double health = player.getHealth() + config.getDouble("regeneration-soup-value");
 
-        if (health > player.getMaxHealth()){
+        if (health > player.getMaxHealth()) {
 
             double difference = player.getMaxHealth() - player.getHealth();
             player.setHealth(difference + player.getHealth());
@@ -58,7 +58,8 @@ public class PlayerInteractListener implements Listener {
     @EventHandler
     public void onInteractSign(PlayerInteractEvent event) {
         if (event.getClickedBlock() == null) return;
-        if (!event.getAction().equals(Action.RIGHT_CLICK_AIR) && !event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) return;
+        if (!event.getAction().equals(Action.RIGHT_CLICK_AIR) && !event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
+            return;
         if (!event.getClickedBlock().getType().equals(Material.WALL_SIGN)) return;
 
         Sign sign = (Sign) event.getClickedBlock().getState();

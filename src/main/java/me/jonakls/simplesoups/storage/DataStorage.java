@@ -13,6 +13,7 @@ import java.sql.SQLException;
 
 public class DataStorage {
 
+    final static String SELECT = "SELECT * FROM $table$ WHERE id = '$id$'";
     private final IConnection connection;
     private final SimpleSoups plugin;
     private final String table;
@@ -25,8 +26,6 @@ public class DataStorage {
         this.connection = connection;
         this.initialize();
     }
-
-    final static String SELECT = "SELECT * FROM $table$ WHERE id = '$id$'";
 
     private void initialize() {
         StringBuilder sql = new StringBuilder();
@@ -45,7 +44,7 @@ public class DataStorage {
             statement.execute();
             plugin.getLogger().info("Loading database success!");
 
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -67,7 +66,7 @@ public class DataStorage {
 
             statement.execute();
 
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -80,11 +79,11 @@ public class DataStorage {
             );
             ResultSet result = statement.executeQuery();
             while (result.next()) {
-                if(result.getString("id").equalsIgnoreCase(id.toLowerCase())) {
+                if (result.getString("id").equalsIgnoreCase(id.toLowerCase())) {
                     return result.getInt("kills");
                 }
             }
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return 0;
@@ -100,11 +99,11 @@ public class DataStorage {
             ResultSet result = statement.executeQuery();
 
             while (result.next()) {
-                if(result.getString("id").equalsIgnoreCase(id.toLowerCase())) {
+                if (result.getString("id").equalsIgnoreCase(id.toLowerCase())) {
                     return result.getInt("deaths");
                 }
             }
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return 0;
@@ -120,11 +119,11 @@ public class DataStorage {
             ResultSet result = statement.executeQuery();
 
             while (result.next()) {
-                if(result.getString("id").equalsIgnoreCase(id.toLowerCase())) {
+                if (result.getString("id").equalsIgnoreCase(id.toLowerCase())) {
                     return result.getInt("xp");
                 }
             }
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return 0;
@@ -139,11 +138,11 @@ public class DataStorage {
             ResultSet result = statement.executeQuery();
 
             while (result.next()) {
-                if(result.getString("id").equalsIgnoreCase(id.toLowerCase())) {
+                if (result.getString("id").equalsIgnoreCase(id.toLowerCase())) {
                     return result.getInt("kdr");
                 }
             }
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return 0;
@@ -159,11 +158,11 @@ public class DataStorage {
             ResultSet result = statement.executeQuery();
 
             while (result.next()) {
-                if(result.getString("id").equalsIgnoreCase(id.toLowerCase())) {
+                if (result.getString("id").equalsIgnoreCase(id.toLowerCase())) {
                     return result.getString("kits").split(",");
                 }
             }
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return def;

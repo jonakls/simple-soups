@@ -20,7 +20,9 @@ Basic and simple mini pvp game, consists of regeneration with soups.
 * Coming...
 
 # Commands:
+
 Coming...
 
 # Permissions:
+
 Coming...

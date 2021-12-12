@@ -9,8 +9,8 @@ public class ChatUtil {
         return ChatColor.translateAlternateColorCodes('&', path);
     }
 
-    public static void sendArrayMessages(CommandSender sender, String...strings) {
-        for(String string : strings) {
+    public static void sendArrayMessages(CommandSender sender, String... strings) {
+        for (String string : strings) {
             sender.sendMessage(toLegacyColors(string));
         }
     }

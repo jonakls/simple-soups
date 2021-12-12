@@ -13,10 +13,10 @@ import java.sql.SQLException;
 
 public class SQLConnection implements IConnection {
 
-    private File file;
-    private Connection connection;
     private final FileManager config;
     private final SimpleSoups plugin;
+    private File file;
+    private Connection connection;
 
     public SQLConnection(PluginCore core) {
         this.plugin = core.getPlugin();
@@ -29,7 +29,7 @@ public class SQLConnection implements IConnection {
         if (!this.file.exists()) {
             try {
                 this.file.createNewFile();
-            }catch (IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -39,7 +39,7 @@ public class SQLConnection implements IConnection {
     public void load() {
         try {
             Class.forName("org.sqlite.JDBC");
-        }catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -48,11 +48,11 @@ public class SQLConnection implements IConnection {
     @Override
     public Connection getConnection() throws SQLException {
         try {
-            if(connection == null || connection.isClosed()) {
+            if (connection == null || connection.isClosed()) {
                 connection = DriverManager.getConnection("jdbc:sqlite:" + file);
             }
             return connection;
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             if (e.getCause() instanceof SQLException) {
                 throw (SQLException) e.getCause();
             }
@@ -63,10 +63,10 @@ public class SQLConnection implements IConnection {
     @Override
     public void close() {
         try {
-            if(connection != null && !connection.isClosed()) {
+            if (connection != null && !connection.isClosed()) {
                 connection.close();
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 

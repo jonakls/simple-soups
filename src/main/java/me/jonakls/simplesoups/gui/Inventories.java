@@ -66,7 +66,7 @@ public class Inventories {
                 guis.getString("refill.title")
         );
 
-        for(int i = 0; i < inventory.getSize() ; i++) {
+        for (int i = 0; i < inventory.getSize(); i++) {
 
             inventory.setItem(i, new ItemStack(Material.MUSHROOM_SOUP));
 

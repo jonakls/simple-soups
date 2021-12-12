@@ -1,22 +1,22 @@
-package me.jonakls.simplesoups.command.builder;
+package me.jonakls.simplesoups.command.factory;
 
 import org.bukkit.command.TabCompleter;
 
-public class TabCompleteBuilder {
+public class TabCompleteFactory {
 
     private final String commandName;
     private final TabCompleter tabCompleter;
 
-    public TabCompleteBuilder(String commandName, TabCompleter tabCompleter) {
+    public TabCompleteFactory(String commandName, TabCompleter tabCompleter) {
         this.commandName = commandName;
         this.tabCompleter = tabCompleter;
     }
 
-    public String getCommandName(){
+    public String getCommandName() {
         return commandName;
     }
 
-    public TabCompleter getTabCompleter(){
+    public TabCompleter getTabCompleter() {
         return tabCompleter;
     }
 

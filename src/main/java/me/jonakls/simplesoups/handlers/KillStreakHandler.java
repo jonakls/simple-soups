@@ -19,7 +19,7 @@ public class KillStreakHandler {
 
     public void actions(Player player) {
 
-        switch (manager.getStreak(player)){
+        switch (manager.getStreak(player)) {
             case 3:
                 this.rewards(player, 3);
                 this.title(player, 3);
@@ -76,15 +76,15 @@ public class KillStreakHandler {
     }
 
     private void title(Player player, int streak) {
-        TitleFactory builder = new TitleFactory(
+        TitleFactory titleFactory = new TitleFactory(
                 lang.getString("kill-streaks.kills-" + streak + ".title"),
                 lang.getString("kill-streaks.kills-" + streak + ".subtitle")
         );
-        builder.setTime(
+        titleFactory.setTime(
                 lang.getInt("kill-streaks.fade-in"),
                 lang.getInt("kill-streaks.stay"),
                 lang.getInt("kill-streaks.fade-out")
         );
-        builder.send(player);
+        titleFactory.send(player);
     }
 }

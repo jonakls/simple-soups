@@ -57,7 +57,7 @@ public class FileManager extends YamlConfiguration {
         try {
             save(file);
         } catch (IOException e) {
-            this.plugin.getLogger().log(Level.SEVERE, "Save of the file '" + this.fileName + "' failed.", e);
+            this.plugin.getLogger().log(Level.SEVERE, "Save of config file '" + this.fileName + "' failed.", e);
         }
     }
 
@@ -66,15 +66,15 @@ public class FileManager extends YamlConfiguration {
 
             load(file);
         } catch (IOException | InvalidConfigurationException e) {
-            this.plugin.getLogger().log(Level.SEVERE, "Reload of the file '" + this.fileName + "' failed.", e);
+            this.plugin.getLogger().log(Level.SEVERE, "Reload of config file '" + this.fileName + "' failed.", e);
         }
     }
 
     @Override
-    public String getString(String path){
+    public String getString(String path) {
         String text = super.getString(path);
 
-        if (text == null){
+        if (text == null) {
             plugin.getLogger().warning("Error: Found path in your " + this.fileName + " file is null: " + path);
             return "[Error 404]: This path is null: " + path;
         }
@@ -85,7 +85,7 @@ public class FileManager extends YamlConfiguration {
     @Override
     public List<String> getStringList(String path) {
         List<String> list = super.getStringList(path);
-        if (list == null){
+        if (list == null) {
             list = new ArrayList<>();
             list.add("[Error 404]: This path is null: " + path);
             plugin.getLogger().warning("Error: Found path in your " + this.fileName + " file is null: " + path);
@@ -97,7 +97,7 @@ public class FileManager extends YamlConfiguration {
     }
 
     public Material getMaterial(String path) {
-        try{
+        try {
             return Material.valueOf(super.getString(path));
         } catch (IllegalArgumentException | NullPointerException e) {
             return Material.BEDROCK;

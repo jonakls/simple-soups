@@ -31,13 +31,12 @@ public class ArrowDamageListener implements Listener {
         Projectile projectile = (Projectile) event.getDamager();
         ProjectileSource source = projectile.getShooter();
 
-        if(!(source instanceof Player)) return;
+        if (!(source instanceof Player)) return;
         Player damager = (Player) source;
 
-        damager.sendMessage(prefix +
-                lang.getString("messages.arrow-message")
-                        .replace("%player%", player.getName())
-                        .replace("%value%", String.valueOf(Math.round(player.getHealth())))
+        damager.sendMessage(prefix + lang.getString("messages.arrow-message")
+                .replace("%player%", player.getName())
+                .replace("%value%", String.valueOf(Math.round(player.getHealth())))
         );
     }
 }

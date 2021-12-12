@@ -19,6 +19,10 @@ public class TitleFactory {
         this.subTitle = subTitle;
     }
 
+    private static void sendPacket(Player player, Packet<?> packet) {
+        (((CraftPlayer) player).getHandle()).playerConnection.sendPacket(packet);
+    }
+
     public void setTime(int fadeIn, int stay, int fadeOut) {
         this.fadeIn = fadeIn;
         this.stay = stay;
@@ -48,9 +52,5 @@ public class TitleFactory {
         sendPacket(player, packet2);
         sendPacket(player, packet3);
         sendPacket(player, packet4);
-    }
-
-    private static void sendPacket(Player player, Packet<?> packet) {
-        (((CraftPlayer) player).getHandle()).playerConnection.sendPacket(packet);
     }
 }

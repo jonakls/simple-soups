@@ -50,9 +50,9 @@ public class ItemFactory {
                 break;
             default:
                 this.item = new ItemStack(Material.valueOf(strings[0]), Integer.parseInt(strings[1]));
-                ItemMeta meta2= item.getItemMeta();
+                ItemMeta meta2 = item.getItemMeta();
                 meta2.setDisplayName(strings[2]);
-                for (int i = 4 ; i <= strings.length ; i++){
+                for (int i = 4; i <= strings.length; i++) {
                     String[] enchant = strings[i - 1].split(":");
                     meta2.addEnchant(
                             Enchantment.getByName(enchant[0]),
@@ -65,7 +65,7 @@ public class ItemFactory {
         }
     }
 
-    public ItemStack getItem(){
+    public ItemStack getItem() {
         return item;
     }
 }

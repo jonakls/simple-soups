@@ -12,14 +12,14 @@ public class PlayerDropItemListener implements Listener {
 
     private final FileManager config;
 
-    public PlayerDropItemListener(PluginCore pluginCore){
+    public PlayerDropItemListener(PluginCore pluginCore) {
         this.config = pluginCore.getFilesLoader().getConfig();
     }
 
     @EventHandler
     private void onItemBowl(PlayerDropItemEvent event) {
         if (event.getItemDrop() == null) return;
-        if (!event.getItemDrop().getItemStack().getType().equals(Material.BOWL)){
+        if (!event.getItemDrop().getItemStack().getType().equals(Material.BOWL)) {
             event.setCancelled(config.getBoolean("deny-drops"));
             return;
         }

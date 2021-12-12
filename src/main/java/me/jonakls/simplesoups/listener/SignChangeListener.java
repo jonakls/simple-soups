@@ -25,7 +25,7 @@ public class SignChangeListener implements Listener {
 
         if (event.getLine(0).equalsIgnoreCase("[soup]")) {
 
-            for (int i = 0 ; i < lines.length ; i++) {
+            for (int i = 0; i < lines.length; i++) {
 
                 event.setLine(
                         i,

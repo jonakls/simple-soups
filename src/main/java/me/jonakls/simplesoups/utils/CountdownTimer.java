@@ -9,18 +9,15 @@ public class CountdownTimer implements Runnable {
 
     // Main class for bukkit scheduling
     private final JavaPlugin plugin;
-
-    // Our scheduled task's assigned id, needed for canceling
-    private Integer assignedTaskId;
-
     // Seconds and shiz
     private final int seconds;
-    private int secondsLeft;
-
     // Actions to perform while counting down, before and after
     private final Consumer<CountdownTimer> everySecond;
     private final Runnable beforeTimer;
     private final Runnable afterTimer;
+    // Our scheduled task's assigned id, needed for canceling
+    private Integer assignedTaskId;
+    private int secondsLeft;
 
     // Construct a timer, you could create multiple so for example if
     // you do not want these "actions"

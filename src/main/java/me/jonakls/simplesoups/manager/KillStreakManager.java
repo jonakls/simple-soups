@@ -42,7 +42,7 @@ public class KillStreakManager {
 
     public int getStreak(Player player) {
         int currentStreak = this.streakList.get(player.getUniqueId());
-        if(currentStreak == 0) {
+        if (currentStreak == 0) {
             this.set(player, 0);
         }
         return currentStreak;

@@ -46,7 +46,7 @@ public class PlayerJoinListener implements Listener {
     public void joinPlayerItems(PlayerJoinEvent event) {
         event.getPlayer().setMetadata("status", new FixedMetadataValue(pluginCore.getPlugin(), GameStatus.SPAWN));
         if (!config.getBoolean("items-on-join")) return;
-        if (config.getBoolean("clear-on-join")){
+        if (config.getBoolean("clear-on-join")) {
             PlayerUtils.clearInventory(event.getPlayer());
         }
 
@@ -66,7 +66,7 @@ public class PlayerJoinListener implements Listener {
     @EventHandler
     public void joinPlayerTeleport(PlayerJoinEvent event) {
 
-        if(!config.getBoolean("join-teleport")) return;
+        if (!config.getBoolean("join-teleport")) return;
         if (config.contains("spawn.world")) {
             event.getPlayer().teleport(new Location(
                     Bukkit.getWorld(config.getString("spawn.world")),

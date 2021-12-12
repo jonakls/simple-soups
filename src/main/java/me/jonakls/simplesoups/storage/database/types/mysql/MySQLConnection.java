@@ -10,20 +10,19 @@ import java.sql.SQLException;
 
 public class MySQLConnection implements IConnection {
 
-    private Connection connection;
+    final static String URL_CONNECTION = "jdbc:mysql://{1}:{2}/{3}";
     public FileManager config;
+    private Connection connection;
 
     public MySQLConnection(PluginCore core) {
         this.config = core.getFilesLoader().getConfig();
     }
 
-    final static String URL_CONNECTION = "jdbc:mysql://{1}:{2}/{3}";
-
     @Override
     public void load() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-        }catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -54,10 +53,10 @@ public class MySQLConnection implements IConnection {
     @Override
     public void close() {
         try {
-            if(connection != null && !connection.isClosed()) {
+            if (connection != null && !connection.isClosed()) {
                 connection.close();
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }

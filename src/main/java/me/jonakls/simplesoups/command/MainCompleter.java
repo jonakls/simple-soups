@@ -20,7 +20,7 @@ public class MainCompleter implements TabCompleter {
             return subCommands;
         }
 
-        if (args.length == 1){
+        if (args.length == 1) {
 
             subCommands.add("reload");
             subCommands.add("give");

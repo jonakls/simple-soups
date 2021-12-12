@@ -65,8 +65,8 @@ public class PluginCore implements Core {
         this.connection.close();
     }
 
-    private void initLoaders(Loader...loaders){
-        for (Loader loader : loaders){
+    private void initLoaders(Loader... loaders) {
+        for (Loader loader : loaders) {
             loader.load();
         }
     }
@@ -75,7 +75,7 @@ public class PluginCore implements Core {
         return filesLoader;
     }
 
-    public SimpleSoups getPlugin(){
+    public SimpleSoups getPlugin() {
         return plugin;
     }
 
@@ -95,7 +95,7 @@ public class PluginCore implements Core {
         return storage;
     }
 
-    public GameScoreboard gameScoreboard(){
+    public GameScoreboard gameScoreboard() {
         return gameScoreboard;
     }
 
