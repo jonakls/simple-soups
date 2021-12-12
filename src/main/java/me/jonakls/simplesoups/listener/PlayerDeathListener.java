@@ -68,10 +68,10 @@ public class PlayerDeathListener implements Listener {
         Player killer = player.getKiller();
 
         if (killer == null) {
-            deathMessages.objectsDamage(player);
+            deathMessages.broadcastDeathMessage(player);
             return;
         }
-        deathMessages.playersDamage(player, killer);
+        deathMessages.broadcastDeathMessage(player, killer);
 
     }
 
