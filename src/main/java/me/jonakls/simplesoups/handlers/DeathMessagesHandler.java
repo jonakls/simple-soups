@@ -4,48 +4,47 @@ import me.jonakls.simplesoups.PluginCore;
 import me.jonakls.simplesoups.manager.FileManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class DeathMessagesHandler {
 
     private final FileManager lang;
+    private final Map<EntityDamageEvent.DamageCause, String> deathMessages;
 
     public DeathMessagesHandler(PluginCore pluginCore) {
         this.lang = pluginCore.getFilesLoader().getLang();
+        this.deathMessages = new HashMap<>();
+        setupDeathMessages();
     }
 
-    public void objectsDamage(Player player) {
+    private void setupDeathMessages() {
+        String prefix = lang.getString("prefix");
+        deathMessages.put(EntityDamageEvent.DamageCause.FALL, prefix + lang.getString("kill-messages.death-by-fall-damage"));
+        deathMessages.put(EntityDamageEvent.DamageCause.LAVA, prefix + lang.getString("kill-messages.death-by-lava"));
+        deathMessages.put(EntityDamageEvent.DamageCause.FIRE, prefix + lang.getString("kill-messages.death-by-fire"));
+        deathMessages.put(EntityDamageEvent.DamageCause.FIRE_TICK, prefix + lang.getString("kill-messages.death-by-fire"));
+        deathMessages.put(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, prefix + lang.getString("kill-messages.death-by-explosion"));
+        deathMessages.put(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION, prefix + lang.getString("kill-messages.death-by-explosion"));
+    }
+
+    public void broadcastDeathMessage(Player player) {
         String prefix = lang.getString("prefix");
 
-        switch (player.getLastDamageCause().getCause()) {
-            case FALL:
-                Bukkit.broadcastMessage(prefix + lang.getString("kill-messages.death-by-fall-damage")
-                        .replace("%player%", player.getName()));
-                break;
-            case LAVA:
-                Bukkit.broadcastMessage(prefix + lang.getString("kill-messages.death-by-lava")
-                        .replace("%player%", player.getName()));
-                break;
-            case FIRE:
-            case FIRE_TICK:
-                Bukkit.broadcastMessage(prefix + lang.getString("kill-messages.death-by-fire")
-                        .replace("%player%", player.getName()));
-                break;
-            case ENTITY_EXPLOSION:
-            case BLOCK_EXPLOSION:
-                Bukkit.broadcastMessage(prefix + lang.getString("kill-messages.death-by-explosion")
-                        .replace("%player%", player.getName()));
-                break;
-            default:
-                Bukkit.broadcastMessage(prefix + lang.getString("kill-messages.death-by-unknown")
-                        .replace("%player%", player.getName()));
-                break;
+        if (deathMessages.containsKey(player.getLastDamageCause().getCause())) {
+            Bukkit.broadcastMessage(deathMessages.get(player.getLastDamageCause().getCause()));
+            return;
         }
+
+        Bukkit.broadcastMessage(prefix + lang.getString("kill-messages.death-by-unknown")
+                .replace("%player%", player.getName()));
     }
 
-    public void playersDamage(Player player, Player killer) {
+    public void broadcastDeathMessage(Player player, Player killer) {
         String prefix = lang.getString("prefix");
 
         Random random = new Random();
