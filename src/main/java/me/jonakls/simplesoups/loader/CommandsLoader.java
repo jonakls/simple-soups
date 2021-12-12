@@ -4,40 +4,40 @@ import me.jonakls.simplesoups.PluginCore;
 import me.jonakls.simplesoups.api.Loader;
 import me.jonakls.simplesoups.command.MainCommand;
 import me.jonakls.simplesoups.command.MainCompleter;
-import me.jonakls.simplesoups.command.builder.ExecutorBuilder;
-import me.jonakls.simplesoups.command.builder.TabCompleteBuilder;
+import me.jonakls.simplesoups.command.factory.ExecutorFactory;
+import me.jonakls.simplesoups.command.factory.TabCompleteFactory;
 import org.bukkit.Bukkit;
 
 public class CommandsLoader implements Loader {
 
     private final PluginCore pluginCore;
 
-    public CommandsLoader(PluginCore pluginCore){
+    public CommandsLoader(PluginCore pluginCore) {
         this.pluginCore = pluginCore;
     }
 
     @Override
     public void load() {
         registerCommands(
-                new ExecutorBuilder("soup", new MainCommand(pluginCore))
+                new ExecutorFactory("soup", new MainCommand(pluginCore))
         );
 
         registerTabCompleter(
-                new TabCompleteBuilder("soup", new MainCompleter())
+                new TabCompleteFactory("soup", new MainCompleter())
         );
     }
 
-    public void registerCommands(ExecutorBuilder... executorBuilders){
+    public void registerCommands(ExecutorFactory... executorFactories) {
 
-        for (ExecutorBuilder executorBuilder : executorBuilders){
-            Bukkit.getPluginCommand(executorBuilder.getCommandName()).setExecutor(executorBuilder.getCommandExecutor());
+        for (ExecutorFactory executorFactory : executorFactories) {
+            Bukkit.getPluginCommand(executorFactory.getCommandName()).setExecutor(executorFactory.getCommandExecutor());
         }
     }
 
-    public void registerTabCompleter(TabCompleteBuilder...tabCompleteBuilders) {
+    public void registerTabCompleter(TabCompleteFactory... tabCompleteFactories) {
 
-        for (TabCompleteBuilder tabCompleteBuilder : tabCompleteBuilders) {
-            Bukkit.getPluginCommand(tabCompleteBuilder.getCommandName()).setTabCompleter(tabCompleteBuilder.getTabCompleter());
+        for (TabCompleteFactory tabCompleteFactory : tabCompleteFactories) {
+            Bukkit.getPluginCommand(tabCompleteFactory.getCommandName()).setTabCompleter(tabCompleteFactory.getTabCompleter());
         }
     }
 }
